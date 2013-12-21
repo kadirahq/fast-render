@@ -8,8 +8,8 @@ Npm.depends({
 
 Package.on_use(function(api) {
   api.use(['minimongo', 'livedata', 'mongo-livedata', 'ejson', 'underscore', 'webapp'], ['server']);
-  api.add_files(['client/ddp_update.js'], 'client'); 
   api.add_files(['server/inject.html'], 'server', {isAsset: true}); 
+
   api.add_files([
     'server/utils.js',
     'server/context.js',
@@ -17,5 +17,11 @@ Package.on_use(function(api) {
     'server/inject.js',
   ], 'server');  
 
+  api.add_files([
+    'client/ddp_update.js',
+    'client/data_handler.js'
+  ], 'client'); 
+
   api.export('FastRender', ['client', 'server']);
+  api.export('__init_fast_render', ['client']);
 });
