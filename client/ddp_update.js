@@ -17,3 +17,17 @@ Meteor.default_connection.constructor.prototype.registerStore = function(name, s
   }
   return original.call(this, name, store);
 }
+
+var originalSend = Meteor.default_connection._send;
+Meteor.default_connection._send = function(msg) {
+  var self = this;
+  setTimeout(function() {
+    if(msg.msg == 'sub' && FastRender._subscriptions && FastRender._subscriptions[msg.name]) {
+      console.log('fake ready sending');
+      self._livedata_data({msg:"ready",subs:[msg.id]});
+      //we don't need to handle specially after this
+      delete FastRender._subscriptions[msg.name];
+    }
+  }, 0);
+  return originalSend.call(this, msg);
+};

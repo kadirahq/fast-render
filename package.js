@@ -18,6 +18,7 @@ Package.on_use(function(api) {
   ], 'server');  
 
   api.add_files([
+    'client/fast_render.js',
     'client/ddp_update.js',
     'client/data_handler.js'
   ], 'client'); 

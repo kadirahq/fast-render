@@ -2,6 +2,7 @@ var Future = Npm.require('fibers/future');
 
 Context = function Context() {
   this._collectionData = {};
+  this._subscriptions = [];
 };
 
 Context.prototype.find = function(collectionName, query, options) {
@@ -33,6 +34,16 @@ Context.prototype.find = function(collectionName, query, options) {
   }
 };
 
+Context.prototype.subscribe = function(subscriptions) {
+  if(typeof subscriptions == 'string') {
+    subscriptions = [subscriptions];
+  } else if(subscriptions.constructor != Array) {
+    throw new Error('subscriptions params should be either a string or array of strings');
+  }
+
+  this._subscriptions = this._subscriptions.concat(subscriptions);
+};
+
 Context.prototype._ensureCollection = function(collectionName) {
   if(!this._collectionData[collectionName]) {
     this._collectionData[collectionName] = [];
@@ -41,6 +52,7 @@ Context.prototype._ensureCollection = function(collectionName) {
 
 Context.prototype.getData = function() {
   return {
-    collectionData: this._collectionData
-  }
+    collectionData: this._collectionData,
+    subscriptions: this._subscriptions
+  };
 };

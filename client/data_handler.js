@@ -19,4 +19,10 @@ __init_fast_render = function(ejsonString) {
       });
     });
   }
+
+  //register subscriptions
+  FastRender._subscriptions = {};
+  initData.subscriptions.forEach(function(subscription) {
+    FastRender._subscriptions[subscription] = true;
+  });
 }
