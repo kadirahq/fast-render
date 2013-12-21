@@ -45,7 +45,7 @@ function appUrl(url) {
     return false;
 
   // Avoid serving app HTML for declared routes such as /sockjs/.
-  if (RoutePolicy.classify(url))
+  if (typeof(RoutePolicy) != 'undefined' && RoutePolicy.classify(url))
     return false;
 
   // we currently return app HTML on all URLs by default
