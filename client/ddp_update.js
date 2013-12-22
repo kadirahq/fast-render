@@ -43,8 +43,8 @@ Meteor.default_connection._process_ready = function(msg) {
       if(subscription) {
         console.log('deleting subscription', subscription, subId);
         //we don't need to handle specially after this
-        delete FastRender._subscriptions[msg.name];
-        delete FastRender._ironRouterSubscriptions[msg.name];
+        delete FastRender._subscriptions[subscription];
+        delete FastRender._ironRouterSubscriptions[subscription];
         delete FastRender._subscriptionIdMap[subId];
       }
     });
