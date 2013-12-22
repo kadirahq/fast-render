@@ -22,7 +22,11 @@ __init_fast_render = function(ejsonString) {
 
   //register subscriptions
   FastRender._subscriptions = {};
-  initData.subscriptions.forEach(function(subscription) {
-    FastRender._subscriptions[subscription] = true;
+  FastRender._ironRouterSubscriptions = {};
+  initData.subscriptions.forEach(function(subscriptionInfo) {
+    FastRender._subscriptions[subscriptionInfo.subscription] = true;
+    if(subscriptionInfo.ironRouterMode) {
+      FastRender._ironRouterSubscriptions[subscriptionInfo.subscription] = true;
+    }
   });
 }

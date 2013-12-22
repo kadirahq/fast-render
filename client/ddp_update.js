@@ -31,3 +31,17 @@ Meteor.default_connection._send = function(msg) {
   }, 0);
   return originalSend.call(this, msg);
 };
+
+/*
+  Need this hack to prevent ironRouter handling these subscriptions
+*/
+var originalSubscribe = Meteor.subscribe;
+Meteor.subscribe = function(subscription) {
+  var rtn = originalSubscribe.apply(this, arguments);
+  if(FastRender._ironRouterSubscriptions && FastRender._ironRouterSubscriptions[subscription]) {
+    delete FastRender._ironRouterSubscriptions[subscription];
+    return undefined;
+  } else {
+    return rtn;
+  }
+};
