@@ -20,6 +20,6 @@ __init_fast_render = function(ejsonString) {
     });
   }
 
-  //register subscriptions
-  FastRender._subscriptionIdMap = {};
+  //special handling for ironRouter
+  FastRender._addIronRouterSupport();
 }

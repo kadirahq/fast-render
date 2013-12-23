@@ -8,6 +8,7 @@ Npm.depends({
 
 Package.on_use(function(api) {
   api.use(['minimongo', 'livedata', 'mongo-livedata', 'ejson', 'underscore', 'webapp'], ['server']);
+
   api.add_files([
     'server/inject_data.html',
     'server/inject_config.html',
@@ -23,7 +24,8 @@ Package.on_use(function(api) {
   api.add_files([
     'client/fast_render.js',
     'client/ddp_update.js',
-    'client/data_handler.js'
+    'client/data_handler.js',
+    'client/iron_router_support.js'
   ], 'client'); 
 
   api.export('FastRender', ['client', 'server']);

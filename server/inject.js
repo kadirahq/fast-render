@@ -31,7 +31,8 @@ http.OutgoingMessage.prototype.write = function(a, b) {
       var jsonContent = JSON.stringify({
         subscriptions: this.queryData.subscriptions,
         serverRoutePath: this.queryData.serverRoutePath,
-        subscriptionIdMap: {}
+        subscriptionIdMap: {}, //map of ids and its subscription name
+        loadedSubscriptions: {} //loaded Subscriptions, which have been forcely completed earlier
       });
       var injectHtml = injectConfigTemplate({jsonContent: jsonContent});
       a = a.replace('<head>', '\n' + injectHtml + '\n<head>');

@@ -1,7 +1,5 @@
 var originalLivedataData = Meteor.default_connection._livedata_data;
 Meteor.default_connection._livedata_data = function(msg) {
-  console.log('MSG', msg);
-  
   //we are inserting docs to a collection manually
   //but when the data comes from the subscription, it will also try to insert
   //but since there are some exiting data, meteor throws an execption
@@ -24,6 +22,9 @@ Meteor.default_connection._livedata_data = function(msg) {
         //we don't need to handle specially after this
         delete __fast_render_config.subscriptions[subscription];
         delete __fast_render_config.subscriptionIdMap[subId];
+
+        //need to track the loaded subscription, specially for handling in the ironRouter
+        __fast_render_config.loadedSubscriptions[subscription] = true;
       }
     });
   }
