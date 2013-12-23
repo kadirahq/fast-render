@@ -8,7 +8,10 @@ Npm.depends({
 
 Package.on_use(function(api) {
   api.use(['minimongo', 'livedata', 'mongo-livedata', 'ejson', 'underscore', 'webapp'], ['server']);
-  api.add_files(['server/inject.html'], 'server', {isAsset: true}); 
+  api.add_files([
+    'server/inject_data.html',
+    'server/inject_config.html',
+  ], 'server', {isAsset: true}); 
 
   api.add_files([
     'server/utils.js',

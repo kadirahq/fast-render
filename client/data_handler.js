@@ -21,13 +21,5 @@ __init_fast_render = function(ejsonString) {
   }
 
   //register subscriptions
-  FastRender._subscriptions = {};
-  FastRender._ironRouterSubscriptions = {};
   FastRender._subscriptionIdMap = {};
-  initData.subscriptions.forEach(function(subscriptionInfo) {
-    FastRender._subscriptions[subscriptionInfo.subscription] = true;
-    if(subscriptionInfo.ironRouterMode) {
-      FastRender._ironRouterSubscriptions[subscriptionInfo.subscription] = true;
-    }
-  });
 }

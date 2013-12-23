@@ -5,25 +5,49 @@
 
 var http = Npm.require('http');
 
-var injectTemplate;
-Assets.getText('server/inject.html', function(err, text) {
+var injectDataTemplate;
+Assets.getText('server/inject_data.html', function(err, text) {
   if(err) {
-    console.error('Error reading fast-render inject.html: ', err.message);
+    console.error('Error reading fast-render inject_data.html: ', err.message);
   } else {
-    injectTemplate = _.template(text.trim());
+    injectDataTemplate = _.template(text.trim());
+  }
+});
+
+var injectConfigTemplate;
+Assets.getText('server/inject_config.html', function(err, text) {
+  if(err) {
+    console.error('Error reading fast-render inject_config.html: ', err.message);
+  } else {
+    injectConfigTemplate = _.template(text.trim());
   }
 });
 
 var originalWrite = http.OutgoingMessage.prototype.write;
 http.OutgoingMessage.prototype.write = function(a, b) {
   if(this.queryData) {
-    //inject them
-    if(injectTemplate) {
-      var ejsonString = EJSON.stringify(this.queryData);
-      var injectHtml = injectTemplate({ejsonString: ejsonString});
+    //inject config
+    if(injectConfigTemplate) {
+      var jsonContent = JSON.stringify({
+        subscriptions: this.queryData.subscriptions,
+        serverRoutePath: this.queryData.serverRoutePath,
+        subscriptionIdMap: {}
+      });
+      var injectHtml = injectConfigTemplate({jsonContent: jsonContent});
+      a = a.replace('<head>', '\n' + injectHtml + '\n<head>');
+    } else {
+      console.warn('injectConfigTemplate is not ready yet!');
+    }
+
+    //inject data
+    if(injectDataTemplate) {
+      var ejsonString = EJSON.stringify({
+        collectionData: this.queryData.collectionData
+      });
+      var injectHtml = injectDataTemplate({ejsonString: ejsonString});
       a = a.replace('</head>', injectHtml + '\n</head>');
     } else {
-      console.warn('injectTemplate is not ready yet!');
+      console.warn('injectDataTemplate is not ready yet!');
     }
   }
   originalWrite.call(this, a, b);
@@ -57,6 +81,7 @@ WebApp.connectHandlers.use(function(req, res, next) {
   if(appUrl(req.url)) {
     FastRender._processRoutes(req.url, function(queryData) {
       res.queryData = queryData;
+      res.queryData.serverRoutePath = req.url;
       next();
     });
     //run our route handlers and add proper queryData

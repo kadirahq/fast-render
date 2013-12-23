@@ -2,7 +2,7 @@ var Future = Npm.require('fibers/future');
 
 Context = function Context() {
   this._collectionData = {};
-  this._subscriptions = [];
+  this._subscriptions = {};
   this._sendNullSubscription
 };
 
@@ -35,7 +35,7 @@ Context.prototype.find = function(collectionName, query, options) {
   }
 };
 
-Context.prototype.completeSubscriptions = function(subscriptions, ironRouterMode) {
+Context.prototype.completeSubscriptions = function(subscriptions) {
   var self = this;
   if(typeof subscriptions == 'string') {
     subscriptions = [subscriptions];
@@ -44,10 +44,7 @@ Context.prototype.completeSubscriptions = function(subscriptions, ironRouterMode
   }
 
   subscriptions.forEach(function(subscription) {
-    self._subscriptions.push({
-      subscription: subscription,
-      ironRouterMode: !!ironRouterMode
-    });
+    self._subscriptions[subscription] = true;
   });
 };
 
