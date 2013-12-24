@@ -24,8 +24,9 @@ Assets.getText('server/inject_config.html', function(err, text) {
 });
 
 var originalWrite = http.OutgoingMessage.prototype.write;
-http.OutgoingMessage.prototype.write = function(a, b) {
-  if(this.queryData) {
+http.OutgoingMessage.prototype.write = function(chunk, encoding) {
+  //prevent hijacking other http requests
+  if(this.queryData && !this.injected && encoding == undefined) {
     //inject config
     if(injectConfigTemplate) {
       var jsonContent = JSON.stringify({
@@ -35,7 +36,7 @@ http.OutgoingMessage.prototype.write = function(a, b) {
         loadedSubscriptions: {} //loaded Subscriptions, which have been forcely completed earlier
       });
       var injectHtml = injectConfigTemplate({jsonContent: jsonContent});
-      a = a.replace('<head>', '\n' + injectHtml + '\n<head>');
+      chunk = chunk.replace('<head>', '<head>\n' + injectHtml + '\n');
     } else {
       console.warn('injectConfigTemplate is not ready yet!');
     }
@@ -46,12 +47,14 @@ http.OutgoingMessage.prototype.write = function(a, b) {
         collectionData: this.queryData.collectionData
       });
       var injectHtml = injectDataTemplate({ejsonString: ejsonString});
-      a = a.replace('</head>', injectHtml + '\n</head>');
+      chunk = chunk.replace('</head>', injectHtml + '\n</head>');
     } else {
       console.warn('injectDataTemplate is not ready yet!');
     }
+
+    this.injected = true;
   }
-  originalWrite.call(this, a, b);
+  originalWrite.call(this, chunk, encoding);
 };
 
 //meteor algorithm to check if this is a meteor serving http request or not
