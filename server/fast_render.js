@@ -34,7 +34,7 @@ FastRender._processRoutes = function _processRoutes(path, callback) {
         selectedRoute.callback.call(context, params);
         callback(context.getData());
       } catch(err) {
-        console.error('error on fast-rendering path: ' + path + " ; error: " + err.message);
+        console.error('error on fast-rendering path: ' + path + " ; error: " + err.stack);
         callback(null);
       }
     }).run();

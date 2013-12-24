@@ -35,6 +35,34 @@ Context.prototype.find = function(collectionName, query, options) {
   }
 };
 
+Context.prototype.subscribe = function(subscription /*, params */) {
+  var self = this;
+  var publishHandler = Meteor.default_server.publish_handlers[subscription];
+  if(publishHandler) {
+    var params = Array.prototype.slice.call(arguments, 1);
+    var cursors = publishHandler.apply(this, params);
+    if(cursors) {
+      if(cursors.constructor != Array) {
+        cursors = [cursors];
+      }
+
+      //add collection data
+      cursors.forEach(function(cursor) {
+        var collectionName = cursor._cursorDescription.collectionName;
+        self._ensureCollection(collectionName);
+        self._collectionData[collectionName].push(cursor.fetch());
+      });
+
+      //set subscription
+      self.completeSubscriptions(subscription);
+    } else {
+      console.warn('No such cursors in publication: ', subscription);
+    }
+  } else {
+    console.warn('There is no such publish handler named:', subscription);
+  }
+};
+
 Context.prototype.completeSubscriptions = function(subscriptions) {
   var self = this;
   if(typeof subscriptions == 'string') {
