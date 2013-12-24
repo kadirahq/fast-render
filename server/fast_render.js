@@ -13,7 +13,7 @@ FastRender.route = function route(path, callback) {
   });
 };
 
-FastRender._processRoutes = function _processRoutes(path, callback) {
+FastRender._processRoutes = function _processRoutes(path, loginToken, callback) {
   var selectedRoute;
   var params;
 
@@ -27,9 +27,8 @@ FastRender._processRoutes = function _processRoutes(path, callback) {
   }
 
   if(selectedRoute) {
-    var context = new Context();
-
     Fiber(function() {
+      var context = new Context(loginToken);
       try {
         selectedRoute.callback.call(context, params);
         callback(context.getData());

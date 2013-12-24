@@ -3,11 +3,12 @@ Package.describe({
 });
 
 Npm.depends({
-  
+  "connect": "2.12.0"
 });
 
 Package.on_use(function(api) {
   api.use(['minimongo', 'livedata', 'mongo-livedata', 'ejson', 'underscore', 'webapp'], ['server']);
+  api.use(['underscore', 'deps', 'ejson'], ['client']);
 
   api.add_files([
     'server/inject_data.html',
@@ -22,10 +23,12 @@ Package.on_use(function(api) {
   ], 'server');  
 
   api.add_files([
+    'vendor/cookies.js',
     'client/fast_render.js',
     'client/ddp_update.js',
     'client/data_handler.js',
-    'client/iron_router_support.js'
+    'client/iron_router_support.js',
+    'client/auth.js'
   ], 'client'); 
 
   api.export('FastRender', ['client', 'server']);

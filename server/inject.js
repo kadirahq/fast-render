@@ -81,11 +81,15 @@ function appUrl(url) {
 };
 
 //check page and add queries
+WebApp.connectHandlers.use(Npm.require('connect').cookieParser());
 WebApp.connectHandlers.use(function(req, res, next) {
   if(appUrl(req.url)) {
-    FastRender._processRoutes(req.url, function(queryData) {
+    var loginToken = req.cookies['meteor_login_token'];
+    FastRender._processRoutes(req.url, loginToken, function(queryData) {
       res.queryData = queryData;
-      res.queryData.serverRoutePath = req.url;
+      if(res.queryData) {
+        res.queryData.serverRoutePath = req.url;
+      }
       next();
     });
     //run our route handlers and add proper queryData

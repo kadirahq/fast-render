@@ -1,9 +1,19 @@
 var Future = Npm.require('fibers/future');
 
-Context = function Context() {
+Context = function Context(loginToken) {
   this._collectionData = {};
   this._subscriptions = {};
   this._sendNullSubscription
+
+  //get the user
+  if(Meteor.users) {
+    var query = {'services.resume.loginTokens.token': loginToken};
+    var options = {fields: {_id: 1}};
+    var user = Meteor.users.findOne(query, options);
+    if(user) {
+      this.userId = user._id;
+    }
+  }
 };
 
 Context.prototype.find = function(collectionName, query, options) {

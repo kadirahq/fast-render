@@ -1,3 +1,8 @@
+if(typeof __fast_render_config == 'undefined') {
+  console.log('NO_FAST_RENDER');
+  return;
+}
+
 var originalLivedataData = Meteor.default_connection._livedata_data;
 Meteor.default_connection._livedata_data = function(msg) {
   //we are inserting docs to a collection manually
@@ -10,7 +15,6 @@ Meteor.default_connection._livedata_data = function(msg) {
       msg.msg = 'changed';
     }
   }
-
 
   //This will take care of cleaning special subscription handling 
   //after the actual subscription comes out
@@ -29,19 +33,24 @@ Meteor.default_connection._livedata_data = function(msg) {
     });
   }
 
-  originalLivedataData.call(this, msg);
+  //if all the subscriptions have been processed, there is no need to keep hijacking
+  if(EJSON.equals(__fast_render_config.subscriptions, {})) {
+    console.log('REVERTING_BACK_TO_ORIGINAL_DDP_HANDLING');
+    Meteor.default_connection._livedata_data = originalLivedataData;
+    Meteor.default_connection._send = originalSend;
+  }
+
+  return originalLivedataData.call(this, msg);
 };
 
 var originalSend = Meteor.default_connection._send;
 Meteor.default_connection._send = function(msg) {
   var self = this;
-  setTimeout(function() {
-    if(msg.msg == 'sub' && __fast_render_config.subscriptions && __fast_render_config.subscriptions[msg.name]) {
-      console.log('fake ready sending');
-      self._livedata_data({msg:"ready",subs:[msg.id], frGen: true});
-      __fast_render_config.subscriptionIdMap[msg.id] = msg.name;
-    }
-  }, 0);
+  if(msg.msg == 'sub' && __fast_render_config.subscriptions && __fast_render_config.subscriptions[msg.name]) {
+    console.log('fake ready sending');
+    self._livedata_data({msg:"ready",subs:[msg.id], frGen: true});
+    __fast_render_config.subscriptionIdMap[msg.id] = msg.name;
+  }
 
   return originalSend.call(this, msg);
 };
