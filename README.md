@@ -6,7 +6,7 @@ FastRender is a small package that will make a huge impact on your Meteor App. I
 
 FastRender simply sends the data which will be used to render the initial page with the HTML itself. So there is no loading process. Just after the HTML(with JS and CSS too) gets loaded, page will be rendered on the screen. No need to wait until connecting to the server and receiving data.
 
-Although page gets rendered, your actual subscription will be send to the server and it will send realtime updates as usual. You can also change this behavior with [`this.forgetSubscriptions`]() API.
+Although page gets rendered, your actual subscription will be send to the server and it will send realtime updates as usual. You can also change this behavior with [`this.forgetSubscriptions`](#thisforgetsubscriptionssubscriptionlist) API.
 
 ## Demo
 
@@ -48,7 +48,15 @@ __*Fast Render*__ works with any Meteor app. Just add it and make your app loads
 
 ## API
 
-FastRender comes with a lot goodies, those are shown here with the examples.
+FastRender comes with a lot goodies, those are shown here with examples.
+
+* [FastRender.route(urlPattern, callback)](#fastrenderrouteurlpattern-callback)
+* [this.subscribe(name, [arg1, arg2, ...])](#thissubscribename-arg1-arg2-)
+* [this.find(collectionName, query, options)](#thisfindcollectionname-query-options)
+* [this.completeSubscriptions(subscriptionList)](#thiscompletesubscriptionssubscriptionlist)
+* [this.userId](#thisuserid)
+* [this.forgetSubscriptions(subscriptionList)](#thisforgetsubscriptionssubscriptionlist)
+* [FastRender.onAllRoutes(callback)](#fastrenderonallroutescallback)
 
 ## FastRender.route(urlPattern, callback)
 
