@@ -8,8 +8,10 @@ __init_fast_render = function(ejsonString) {
       itemList.forEach(function(item) {
         var localCollection = Meteor.default_connection._mongo_livedata_collections[collName];
         if(localCollection) {
-          if(localCollection.findOne(item._id)) {
-            localCollection.update(item._id, item);
+          var exitingDoc = localCollection.findOne(item._id);
+          if(exitingDoc) {
+            DeepExtend(true, exitingDoc, item);
+            localCollection.update(item._id, exitingDoc);
           } else {
             localCollection.insert(item);
           }

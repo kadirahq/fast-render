@@ -1,7 +1,8 @@
 var Fiber = Npm.require('fibers');
 
 FastRender = {
-  _routes: []
+  _routes: [],
+  _onAllRoutes: []
 };
 
 FastRender.route = function route(path, callback) {
@@ -11,6 +12,10 @@ FastRender.route = function route(path, callback) {
     callback: callback,
     keys: keys
   });
+};
+
+FastRender.onAllRoutes = function onAllRoutes(callback) {
+  FastRender._onAllRoutes.push(callback);
 };
 
 FastRender._processRoutes = function _processRoutes(path, loginToken, callback) {
@@ -30,6 +35,11 @@ FastRender._processRoutes = function _processRoutes(path, loginToken, callback) 
     Fiber(function() {
       var context = new Context(loginToken);
       try {
+        //run onAllRoutes callbacks if provided
+        FastRender._onAllRoutes.forEach(function(callback) {
+          callback.call(context, path);
+        });
+
         selectedRoute.callback.call(context, params);
         callback(context.getData());
       } catch(err) {

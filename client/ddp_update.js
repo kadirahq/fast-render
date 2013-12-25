@@ -5,6 +5,7 @@ if(typeof __fast_render_config == 'undefined') {
 
 var originalLivedataData = Meteor.default_connection._livedata_data;
 Meteor.default_connection._livedata_data = function(msg) {
+  console.log('DDP_RECIEVE', msg);
   //we are inserting docs to a collection manually
   //but when the data comes from the subscription, it will also try to insert
   //but since there are some exiting data, meteor throws an execption
@@ -12,7 +13,7 @@ Meteor.default_connection._livedata_data = function(msg) {
   if(msg.msg == 'added') {
     var localCollection = Meteor.default_connection._mongo_livedata_collections[msg.collection];
     if(localCollection.findOne(msg.id)) {
-      msg.msg = 'changed';
+      localCollection.remove(msg.id);
     }
   }
 
@@ -45,6 +46,7 @@ Meteor.default_connection._livedata_data = function(msg) {
 
 var originalSend = Meteor.default_connection._send;
 Meteor.default_connection._send = function(msg) {
+  console.log("DDP_SEND", msg);
   var self = this;
   if(msg.msg == 'sub' && __fast_render_config.subscriptions && __fast_render_config.subscriptions[msg.name]) {
     console.log('fake ready sending');
