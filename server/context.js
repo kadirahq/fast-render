@@ -3,6 +3,7 @@ var Future = Npm.require('fibers/future');
 Context = function Context(loginToken) {
   this._collectionData = {};
   this._subscriptions = {};
+  this._forgetSubscriptions = {};
   this._sendNullSubscription
 
   //get the user
@@ -86,6 +87,19 @@ Context.prototype.completeSubscriptions = function(subscriptions) {
   });
 };
 
+Context.prototype.forgetSubscriptions = function(subscriptions) {
+  var self = this;
+  if(typeof subscriptions == 'string') {
+    subscriptions = [subscriptions];
+  } else if(subscriptions.constructor != Array) {
+    throw new Error('subscriptions params should be either a string or array of strings');
+  }
+
+  subscriptions.forEach(function(subscription) {
+    self._forgetSubscriptions[subscription] = true;
+  });
+};
+
 Context.prototype._ensureCollection = function(collectionName) {
   if(!this._collectionData[collectionName]) {
     this._collectionData[collectionName] = [];
@@ -95,6 +109,7 @@ Context.prototype._ensureCollection = function(collectionName) {
 Context.prototype.getData = function() {
   return {
     collectionData: this._collectionData,
-    subscriptions: this._subscriptions
+    subscriptions: this._subscriptions,
+    forgetSubscriptions: this._forgetSubscriptions
   };
 };

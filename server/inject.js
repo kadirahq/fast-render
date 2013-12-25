@@ -31,6 +31,7 @@ http.OutgoingMessage.prototype.write = function(chunk, encoding) {
     if(injectConfigTemplate) {
       var jsonContent = JSON.stringify({
         subscriptions: this.queryData.subscriptions,
+        forgetSubscriptions: this.queryData.forgetSubscriptions,
         serverRoutePath: this.queryData.serverRoutePath,
         subscriptionIdMap: {}, //map of ids and its subscription name
         loadedSubscriptions: {} //loaded Subscriptions, which have been forcely completed earlier
