@@ -10,7 +10,7 @@ Although page gets rendered, your actual subscription will be send to the server
 
 ## Demo
 
-I've added FastRender [support to Telescope](https://github.com/arunoda/fast-render-telescope/blob/master/server/fastRender.js) and you see how fast [Telescope](http://telesc.pe/) with FastRender. Both of the apps are hosted on meteor.com.
+I've added FastRender [support](https://github.com/arunoda/fast-render-telescope/blob/master/server/fastRender.js) to [Telescope](http://telesc.pe/) and you see how fast Telescope with FastRender. Both of the apps are hosted on meteor.com.
 
 * [Normal Telescope](http://oridinary-telescope.meteor.com/)
 * [FastRender Powered Telescope](http://fast-render-telescope.meteor.com/)
