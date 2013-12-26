@@ -44,7 +44,7 @@ if(Meteor.isServer) {
 
 Now your blog post rendered very fast and no need to wait anymore.
 
-__*Fast Render*__ works with any Meteor app. Just add it and make your app loads faster.
+__*Fast Render*__ works with any Meteor app. Just add it and create some routes; it just works.
 
 ## API
 
