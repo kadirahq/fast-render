@@ -19,6 +19,12 @@ Meteor.default_connection._livedata_data = function(msg) {
       DeepExtend(msg.fields, existingDoc);
       msg.msg = "updated";
     }
+  } else if(msg.msg == 'updated') {
+    var localCollection = Meteor.default_connection._mongo_livedata_collections[msg.collection];
+    var existingDoc = localCollection.findOne(msg.id);
+    if(!existingDoc) {
+      msg.msg = "added";
+    }
   }
 
   //if we've completed our tasks, no need of special handling
