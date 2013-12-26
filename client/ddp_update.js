@@ -14,8 +14,10 @@ Meteor.default_connection._livedata_data = function(msg) {
   //here comes the fix
   if(msg.msg == 'added') {
     var localCollection = Meteor.default_connection._mongo_livedata_collections[msg.collection];
-    if(localCollection.findOne(msg.id)) {
-      localCollection.remove(msg.id);
+    var existingDoc = localCollection.findOne(msg.id);
+    if(existingDoc) {
+      DeepExtend(msg.fields, existingDoc);
+      msg.msg = "updated";
     }
   }
 
