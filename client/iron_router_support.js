@@ -3,20 +3,18 @@ if(!Package['iron-router']) return;
 //track whether inside the ironRouter or not
 //useful for identifying this inside the Meteor.subscribe
 var insideIronRouter = false;
-var RouteController = Package['iron-router'].RouteController;
+var RouteController = FastRender.RouteController = Package['iron-router'].RouteController;
 
-var superRun = RouteController.prototype.run;
-FastRender.RouteController = RouteController.extend({
-  run: function() {
-    if(FastRender.enabled) {
-      insideIronRouter = true;
-      superRun.call(this);
-      insideIronRouter = false;
-    } else {
-      superRun.call(this);
-    }
+var originalRun = RouteController.prototype.run;
+RouteController.prototype.run = function() {
+  if(FastRender.enabled) {
+    insideIronRouter = true;
+    originalRun.call(this);
+    insideIronRouter = false;
+  } else {
+    originalRun.call(this);
   }
-});
+};
 
 var originalSubscribe = Meteor.subscribe;
 Meteor.subscribe = function(subscription) {
