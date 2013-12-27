@@ -8,22 +8,26 @@ var revertedBackToOriginal = false;
 var originalLivedataData = Meteor.default_connection._livedata_data;
 Meteor.default_connection._livedata_data = function(msg) {
   console.log('DDP_RECIEVE', msg);
+
+  //this becomes true when data receiving after a disconnect, so no need of special handling
+  //if we handled it, we are comparing with some wrong set of collection of the previous collection
+  //which gives wrong results
+  if(revertedBackToOriginal && this._waitingForQuiescence()) {
+    return originalLivedataData.call(this, msg);
+  }
+
   //we are inserting docs to a collection manually
   //but when the data comes from the subscription, it will also try to insert
   //but since there are some exiting data, meteor throws an execption
-  //here comes the fix
+
+  //we need to keep this up, even after revertedBackToOriginal due to that, 
+  //forgetSubscriptions() need this, if it receives data from the server from a new subscription
   if(msg.msg == 'added') {
     var localCollection = Meteor.default_connection._mongo_livedata_collections[msg.collection];
     var existingDoc = localCollection.findOne(msg.id);
     if(existingDoc) {
       DeepExtend(msg.fields, existingDoc);
-      msg.msg = "updated";
-    }
-  } else if(msg.msg == 'updated') {
-    var localCollection = Meteor.default_connection._mongo_livedata_collections[msg.collection];
-    var existingDoc = localCollection.findOne(msg.id);
-    if(!existingDoc) {
-      msg.msg = "added";
+      msg.msg = "changed";
     }
   }
 
@@ -80,3 +84,4 @@ Meteor.default_connection._send = function(msg) {
 
   return originalSend.call(this, msg);
 };
+

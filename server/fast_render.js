@@ -40,7 +40,7 @@ FastRender._processRoutes = function _processRoutes(path, loginToken, callback) 
           callback.call(context, path);
         });
 
-        selectedRoute.callback.call(context, params);
+        selectedRoute.callback.call(context, params, path);
         callback(context.getData());
       } catch(err) {
         console.error('error on fast-rendering path: ' + path + " ; error: " + err.stack);

@@ -11,3 +11,5 @@ FastRender.completeSubscriptions = function(subscriptions) {
     __fast_render_config.subscriptions[subscription] = true;
   });
 };
+
+FastRender.enabled = typeof __fast_render_config != 'undefined';

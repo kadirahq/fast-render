@@ -10,6 +10,10 @@ Package.on_use(function(api) {
   api.use(['minimongo', 'livedata', 'mongo-livedata', 'ejson', 'underscore', 'webapp'], ['server']);
   api.use(['underscore', 'deps', 'ejson'], ['client']);
 
+  if(isIronRouterExists()) {
+    api.use(['iron-router'], ['client', 'server'], {weak: true});
+  }
+
   api.add_files([
     'server/inject_data.html',
     'server/inject_config.html',
@@ -20,6 +24,7 @@ Package.on_use(function(api) {
     'server/context.js',
     'server/fast_render.js',
     'server/inject.js',
+    'server/iron_router_support.js',
   ], 'server');  
 
   api.add_files([
@@ -35,3 +40,10 @@ Package.on_use(function(api) {
   api.export('FastRender', ['client', 'server']);
   api.export('__init_fast_render', ['client']);
 });
+
+function isIronRouterExists() {
+  var fs = Npm.require('fs');
+  var path = Npm.require('path');
+  var meteorPackages = fs.readFileSync(path.resolve('.meteor/packages'), 'utf8');
+  !!meteorPackages.match(/iron-router\n/);
+}

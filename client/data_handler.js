@@ -21,7 +21,4 @@ __init_fast_render = function(ejsonJson) {
       });
     });
   }
-
-  //special handling for ironRouter
-  FastRender._addIronRouterSupport();
 }
