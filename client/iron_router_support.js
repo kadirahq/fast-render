@@ -26,13 +26,16 @@ FastRender._addIronRouterSupport = function() {
       !__fast_render_config.loadedSubscriptions[subscription]
 
     if(condition) {
-      FastRender.completeSubscriptions(subscription);
       originalSubscribe.apply(this, arguments);
+
+      //ironRouter call .ready() and and if it's true he think subscription is completed
+      return {
+        ready: function() {
+          return true;
+        }
+      }
     } else {
       return originalSubscribe.apply(this, arguments);
     }
   };
 };
-
-
-
