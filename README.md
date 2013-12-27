@@ -46,6 +46,63 @@ Now your blog post rendered very fast and no need to wait anymore.
 
 __*Fast Render*__ works with any Meteor app. Just add it and create some routes; it just works.
 
+## Concept
+
+The concept behind FastRender is very simple -- Just send the data which needs to render the initial page.
+
+So the user can see the page, without need to load anything. In the background other subscriptions may load some other data.
+
+Keep in mind that you are sending bunch of data with the initial HTML, if you send too much of data, your page(initial HTML) will load slowly. That's not good.
+
+## Iron Router Support
+
+If you are using IronRouter [`waitOn`](https://github.com/EventedMind/iron-router#waiting-on-subscriptions-waiton) or [`wait`](https://github.com/EventedMind/iron-router#waiting-on-subscriptions-wait) functionality, consider these recommendations.
+
+IronRouter waits on all the subscriptions defined with `waitOn` or `wait` before rendering the page. Even if you have the data locally (with FastRender), it waits until subscriptions are completed. There are two options, you can used to avoid this behaviour.
+
+### Option 1: Use this.subscribe
+
+Let's say you've a route on `/blog/:slug`. In the IronRouter you are using `waitOn` with subscriptions `blogPost` and `blogAuthor`. So, in this case you need to subscribe to both of these subscriptions with FastRender as shown below.
+
+~~~js
+FastRender.route('/blog/:slug', function(params) {
+  this.subscribe('blogPost', params.slug);
+  this.subscribe('blogAuthor', params.slug);
+})
+~~~
+
+If your `blogAuthor` subscription accepts the `_id` of the author instead of the `slug`. You can use something like following:
+
+~~~js
+FastRender.route('/blog/:slug', function(params) {
+  this.subscribe('blogPost', params.slug);
+
+  //assuming, PostCollection is the Meteor Collection for your blog posts
+  var authorId = PostCollection.findOne({slug: params.slug}).authorId;
+  this.subscribe('blogAuthor', authorId);
+})
+~~~
+
+### Option 2: Use this.completeSubscriptions()
+
+Let's say your IronRouter route `/blog/:slug` is waiting on `blog` and `authors` subscriptions. This case you are loading all the blogs and authors in to the page. If you've few number of blogs and authors this is not bad. But it is not good to load all these data with FastRender. 
+
+Now, you can load the only the current blog post and trick IronRouter with saying subscription is completed even before it completed. You can try something like below:
+
+~~~js
+FastRender.route('/blog/:slug', function(params) {
+  //assuming, PostCollection is the Meteor Collection for your blog posts
+  this.find(PostCollection, {slug: params.slug});
+  //now we are forcling Meteor client to say it has successfully loaded the blog subscription
+  this.completeSubscriptions(['blog']);
+
+  //there are only few authors, loading all of them is not a bad idea
+  this.subscribe('authors');
+})
+~~~
+
+> `this.completeSubscriptions()` can also be used without IronRouter. It might help if you've implemented some custom loading indicator.
+
 ## API
 
 FastRender comes with a lot goodies, those are shown here with examples.
