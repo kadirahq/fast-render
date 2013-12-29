@@ -1,5 +1,5 @@
 if(typeof __fast_render_config == 'undefined') {
-  console.log('NO_FAST_RENDER');
+  Log('NO_FAST_RENDER');
   return;
 }
 
@@ -7,7 +7,7 @@ var revertedBackToOriginal = false;
 
 var originalLivedataData = Meteor.default_connection._livedata_data;
 Meteor.default_connection._livedata_data = function(msg) {
-  console.log('DDP_RECIEVE', msg);
+  Log('DDP_RECIEVE', msg);
 
   //this becomes true when data receiving after a disconnect, so no need of special handling
   //if we handled it, we are comparing with some wrong set of collection of the previous collection
@@ -39,7 +39,7 @@ Meteor.default_connection._livedata_data = function(msg) {
       msg.subs.forEach(function(subId) {
         var subscription = __fast_render_config.subscriptionIdMap[subId];
         if(subscription) {
-          console.log('deleting subscription', subscription, subId);
+          Log('DELETING_SUBSCRIPTION', subscription, subId);
           //we don't need to handle specially after this
           delete __fast_render_config.subscriptions[subscription];
           delete __fast_render_config.subscriptionIdMap[subId];
@@ -52,7 +52,7 @@ Meteor.default_connection._livedata_data = function(msg) {
 
     //if all the subscriptions have been processed, there is no need to keep hijacking
     if(EJSON.equals(__fast_render_config.subscriptions, {})) {
-      console.log('REVERTING_BACK_TO_ORIGINAL_DDP_HANDLING');
+      Log('REVERTING_BACK_TO_ORIGINAL_DDP_HANDLING');
       revertedBackToOriginal = true;
     }
   }
@@ -62,16 +62,17 @@ Meteor.default_connection._livedata_data = function(msg) {
 
 var originalSend = Meteor.default_connection._send;
 Meteor.default_connection._send = function(msg) {
-  console.log("DDP_SEND", msg);
+  Log("DDP_SEND", msg);
   var self = this;
 
   //if we've completed our tasks, no need of special handling
   if(!revertedBackToOriginal) {
     if(msg.msg == 'sub' && __fast_render_config.subscriptions && __fast_render_config.subscriptions[msg.name]) {
-      console.log('fake ready sending');
+      Log('FAKE_SUB_READY', msg.name);
       self._livedata_data({msg:"ready",subs:[msg.id], frGen: true});
       if(__fast_render_config.forgetSubscriptions[msg.name]) {
         //we need to clear the subscription info and avoid sending it to the server
+        Log('FORGET_SUBSCRIPTION', msg.name);
         delete __fast_render_config.forgetSubscriptions[msg.name];
         delete __fast_render_config.subscriptions[msg.name];
         return;

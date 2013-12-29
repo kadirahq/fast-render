@@ -30,6 +30,7 @@ Package.on_use(function(api) {
   api.add_files([
     'vendor/cookies.js',
     'vendor/deepExtend.js',
+    'client/log.js',
     'client/fast_render.js',
     'client/ddp_update.js',
     'client/data_handler.js',

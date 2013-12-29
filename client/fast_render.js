@@ -13,3 +13,4 @@ FastRender.completeSubscriptions = function(subscriptions) {
 };
 
 FastRender.enabled = typeof __fast_render_config != 'undefined';
+FastRender.Log = Log;

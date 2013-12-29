@@ -28,6 +28,7 @@ Meteor.subscribe = function(subscription) {
     !__fast_render_config.loadedSubscriptions[subscription]
 
   if(condition) {
+    Log('APPLY_IR_SUB_CORRECTIONS', subscription);
     originalSubscribe.apply(this, arguments);
 
     //ironRouter call .ready() and and if it's true he think subscription is completed
