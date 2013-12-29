@@ -8,31 +8,34 @@ Meteor.subscribe = function(subscription) {
   currentSubscriptions.push(arguments);
 };
 
-var originalRoute = ServerRouter.prototype.route;
-ServerRouter.prototype.route = function(name, options) {
-  var condition = 
-    options &&
-    options.controller &&
-    options.controller.prototype.fastRender &&
-    typeof options.controller.prototype.waitOn == 'function';
+//assuming, no runtime routes will be added
+Meteor.startup(function() {
+  Router.routes.forEach(function(route) {
+    handleRoute(route.options);
+  });
+});
 
+function handleRoute(options) {
   var waitOnFunction;
   if(!options) {
-    // return originalRoute.call(this, name);
+    return false;
   } else if(options.fastRender && options.waitOn) {
     //do FR support
     waitOnFunction = options.waitOn;
     FastRender.route(options.path, onRoute);
+    return true;
   } else if(options.controller && 
     options.controller.prototype.fastRender &&
     typeof options.controller.prototype.waitOn == 'function') {
     
     waitOnFunction = options.controller.prototype.waitOn;
     FastRender.route(options.path, onRoute);
+    return true;
   } else {
-    return originalRoute.call(this, name, options);
+    return false;
   }
 
+  //FastRender onRoute callback
   function onRoute(params, path) {
     var self = this;
     var context = {
@@ -48,14 +51,10 @@ ServerRouter.prototype.route = function(name, options) {
       self.subscribe.apply(self, args);
     });
   }
-};
+}
 
 FastRender.RouteController = RouteController.extend({
   fastRender: true,
-  action: function() {
-    console.log('ACTION');
-  },
-  run: function() {
-    console.log('RUN');
-  }
+  //disabling any IR specific serverside stuffs
+  where: 'client'
 });

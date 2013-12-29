@@ -1,5 +1,5 @@
 // stolen from: http://stackoverflow.com/questions/9399365/deep-extend-like-jquerys-for-nodejs
-DeepExtend = function () {
+DeepExtend = deepExtend = function () {
   var options, name, src, copy, copyIsArray, clone, target = arguments[0] || {},
       i = 1,
       length = arguments.length,
