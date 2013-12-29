@@ -56,13 +56,44 @@ Keep in mind that you are sending bunch of data with the initial HTML, if you se
 
 ## Iron Router Support
 
-If you are using IronRouter [`waitOn`](https://github.com/EventedMind/iron-router#waiting-on-subscriptions-waiton) or [`wait`](https://github.com/EventedMind/iron-router#waiting-on-subscriptions-wait) functionality, consider these recommendations.
+FastRender has been deeply intergrated into IronRouter and with some few changes you can add FastRender support very easily. There are several ways to integrate depending on how you are using IronRouter.
 
-IronRouter waits on all the subscriptions defined with `waitOn` or `wait` before rendering the page. Even if you have the data locally (with FastRender), it waits until subscriptions are completed. There are two options, you can used to avoid this behaviour.
+## Option 1: If you are using waitOn
 
-### Option 1: Use this.subscribe
+If you are using waitOn functionality, you can add FastRender support very easily. Follow the steps shown below:
 
-Let's say you've a route on `/blog/:slug`. In the IronRouter you are using `waitOn` with subscriptions `blogPost` and `blogAuthor`. So, in this case you need to subscribe to both of these subscriptions with FastRender as shown below.
+* Make your route definition files accessible to both the server and the client
+* If you are extending `RouteController`, extend it from `FastRender.RouteController`.
+
+See how it's looks like:
+
+~~~js
+PostsListController = FastRender.RouteController.extend({
+  ...
+})
+~~~
+
+* If you are directly using `this.route`, add `fastRender: true` option.
+
+See how it's looks like:
+
+~~~js
+this.route('post_edit', {
+  path: '/posts/:_id/edit',
+  waitOn: function () {
+    return Meteor.subscribe('singlePost', this.params._id);
+  },
+  fastRender: true
+});
+~~~
+
+* Make sure your `waitOn` function doesn't have any client specific code or guard them with `Meteor.isClient`.
+
+## Option 2: If you are not using waitOn
+
+If you are using `wait` functionality on a `before` handler or you are not comfortable with exposing route definitions into server side, use this option.
+
+Create FastRender routes identical to the IronRouter routes and subscribe accordingly with `this.subscribe` as shown below:
 
 ~~~js
 FastRender.route('/blog/:slug', function(params) {
@@ -83,11 +114,11 @@ FastRender.route('/blog/:slug', function(params) {
 })
 ~~~
 
-### Option 2: Use this.completeSubscriptions()
+## Option 3: Using FastRender with much Control
 
-Let's say your IronRouter route `/blog/:slug` is waiting on `blog` and `authors` subscriptions. This case you are loading all the blogs and authors in to the page. If you've few number of blogs and authors this is not bad. But it is not good to load all these data with FastRender. 
+Let's say your IronRouter route `/blog/:slug` is waiting on `blog` and `authors` subscriptions. This case you are loading all the blogs and authors in to the page. If you've few number of blogs and authors this is not bad. But it is not good to load all these data with FastRender, because it might slow down the initial HTML loading.
 
-Now, you can load the only the current blog post and trick IronRouter with saying subscription is completed even before it completed. You can try something like below:
+In this case, you can only load data for the current blog post and trick IronRouter with saying subscription is completed even before it completed. You can try something like below: (in the service side)
 
 ~~~js
 FastRender.route('/blog/:slug', function(params) {
