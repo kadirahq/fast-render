@@ -11,25 +11,25 @@ Meteor.subscribe = function(subscription) {
 //assuming, no runtime routes will be added
 Meteor.startup(function() {
   Router.routes.forEach(function(route) {
-    handleRoute(route.options);
+    handleRoute(route.name, route.options);
   });
 });
 
-function handleRoute(options) {
+function handleRoute(name, options) {
   var waitOnFunction;
   if(!options) {
     return false;
   } else if(options.fastRender && options.waitOn) {
     //do FR support
     waitOnFunction = options.waitOn;
-    FastRender.route(options.path, onRoute);
+    FastRender.route(getPath(), onRoute);
     return true;
   } else if(options.controller && 
     options.controller.prototype.fastRender &&
     typeof options.controller.prototype.waitOn == 'function') {
     
     waitOnFunction = options.controller.prototype.waitOn;
-    FastRender.route(options.path, onRoute);
+    FastRender.route(getPath(), onRoute);
     return true;
   } else {
     return false;
@@ -50,6 +50,10 @@ function handleRoute(options) {
     currentSubscriptions.forEach(function(args) {
       self.subscribe.apply(self, args);
     });
+  }
+
+  function getPath() {
+    return options.path || ("/" + name);
   }
 }
 
