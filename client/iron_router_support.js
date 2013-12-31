@@ -23,7 +23,9 @@ Meteor.subscribe = function(subscription) {
     //need to inside the ironRouter
     insideIronRouter &&
     //path loaded from the server and the local Router path should be the same
-    Router.current().path == __fast_render_config.serverRoutePath &&
+    //We can't simply use Router.current().path, it will give some weird deps behaviour
+    //which will result subscriptions stop everytime even they are not meant to
+    getPath() == __fast_render_config.serverRoutePath &&
     //subscription not yet actually loaded (this may call multiple times)
     !__fast_render_config.loadedSubscriptions[subscription]
 
@@ -41,3 +43,7 @@ Meteor.subscribe = function(subscription) {
     return originalSubscribe.apply(this, arguments);
   }
 };
+
+function getPath() {
+  return '/' + location.href.replace(/^.*\//, '');
+}
