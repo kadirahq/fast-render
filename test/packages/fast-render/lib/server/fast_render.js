@@ -31,23 +31,22 @@ FastRender._processRoutes = function _processRoutes(path, loginToken, callback) 
     }
   }
 
-  if(selectedRoute) {
-    Fiber(function() {
-      var context = new Context(loginToken);
-      try {
-        //run onAllRoutes callbacks if provided
-        FastRender._onAllRoutes.forEach(function(callback) {
-          callback.call(context, path);
-        });
+  Fiber(function() {
+    var context = new Context(loginToken);
+    try {
+      //run onAllRoutes callbacks if provided
+      FastRender._onAllRoutes.forEach(function(callback) {
+        callback.call(context, path);
+      });
 
+      if(selectedRoute) {
         selectedRoute.callback.call(context, params, path);
-        callback(context.getData());
-      } catch(err) {
-        console.error('error on fast-rendering path: ' + path + " ; error: " + err.stack);
-        callback(null);
       }
-    }).run();
-  } else {
-    callback(null);
-  }
+
+      callback(context.getData());
+    } catch(err) {
+      console.error('error on fast-rendering path: ' + path + " ; error: " + err.stack);
+      callback(null);
+    }
+  }).run();
 };

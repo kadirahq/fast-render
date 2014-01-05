@@ -6,7 +6,7 @@
 var http = Npm.require('http');
 
 var injectDataTemplate;
-Assets.getText('server/inject_data.html', function(err, text) {
+Assets.getText('lib/server/inject_data.html', function(err, text) {
   if(err) {
     console.error('Error reading fast-render inject_data.html: ', err.message);
   } else {
@@ -15,7 +15,7 @@ Assets.getText('server/inject_data.html', function(err, text) {
 });
 
 var injectConfigTemplate;
-Assets.getText('server/inject_config.html', function(err, text) {
+Assets.getText('lib/server/inject_config.html', function(err, text) {
   if(err) {
     console.error('Error reading fast-render inject_config.html: ', err.message);
   } else {
