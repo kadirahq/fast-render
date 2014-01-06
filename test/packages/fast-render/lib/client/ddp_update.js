@@ -24,10 +24,12 @@ Meteor.default_connection._livedata_data = function(msg) {
   //forgetSubscriptions() need this, if it receives data from the server from a new subscription
   if(msg.msg == 'added') {
     var localCollection = Meteor.default_connection._mongo_livedata_collections[msg.collection];
-    var existingDoc = localCollection.findOne(msg.id);
-    if(existingDoc) {
-      DeepExtend(msg.fields, existingDoc);
-      msg.msg = "changed";
+    if(localCollection) {
+      var existingDoc = localCollection.findOne(msg.id);
+      if(existingDoc) {
+        msg.fields = DeepExtend(true, existingDoc, msg.fields);
+        msg.msg = "changed";
+      }
     }
   }
 
