@@ -14,26 +14,19 @@ In order to prevent loading actual subscriptions, we can use a fake `DDP_DEFAULT
 
 ### Iron Router with RouteController
 
-This scenario test the IronRouter support when using RouteController. Use Telescope Meteor application for this. Make sure to add some posts to it, otherwise we cannot see any difference.
+This scenario test the IronRouter support when using RouteController. Use [FastRender powered Telescope](https://github.com/arunoda/fast-render-telescope) Meteor application for this. Make sure to add some posts to it, otherwise we cannot see any difference.
 
-* bring `/client/helpers/routes.js` to `/routes.js`
-* First extend with `FastRender.RouteController` instead `RouteController`
 * visit `/top` and see whether posts are getting rendered without loading
 
 ### Iron Router with fastRender:true
 
-In this case, we are testing routes directly using `this.route` with waitOn. Again, we are using Telescope.
+In this case, we are testing routes directly using `this.route` with waitOn. Again, we are using above mentioned Telescope.
 
-* bring `/client/helpers/routes.js` to `/routes.js`
-* Find such a route described above
-* add additional option as `fastRender:true`
-* visit that route and see whether posts are getting rendered without loading
+* visit `/posts/:_id/edit` and see whether posts are getting rendered without loading 
 
-### Iron Router used in a package
+### With loggedIn user support
 
-In this case, we are testing a how FastRender works with IronRouter installed as a package but not a direct dependency to the meteor app. [`blog`](https://atmosphere.meteor.com/package/blog) smart package is a good example for it.
+Do any of the above Telescope's scenarios with the user loggedIn. Try with the same with logging out.
 
-* create a meteor package and setup `blog` as with the given instructions: http://github.differential.io/meteor-blog/
-* add FR support to the blog package (with `fastRender: true`)
-* visit that route and see whether posts are getting loaded without loading
+
 
