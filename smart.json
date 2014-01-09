@@ -4,8 +4,5 @@
   "homepage": "https://github.com/arunoda/meteor-fast-render",
   "author": "Arunoda Susiripala <arunoda.susiripala@gmail.com>",
   "version": "0.1.0",
-  "git": "https://github.com/arunoda/meteor-fast-render.git",
-  "packages": {
-    "iron-router": {}
-  }
+  "git": "https://github.com/arunoda/meteor-fast-render.git"
 }
