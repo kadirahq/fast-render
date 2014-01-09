@@ -45,5 +45,7 @@ Meteor.subscribe = function(subscription) {
 };
 
 function getPath() {
-  return '/' + location.href.replace(/^.*\//, '');
+  var url = document.createElement('a');
+  url.href = location.href;
+  return url.pathname;
 }
