@@ -69,4 +69,28 @@ suite('Routes', function() {
     assert.deepEqual(data.subscriptions, expected);
     done();
   });
+
+  test('loginToken:Meteor.userId', function(done, server, client) {
+    client.evalSync(laika.actions.createUser, {username: 'arunoda', password: '123456'});
+    var data = server.evalSync(function() {
+      var user = Meteor.users.findOne({username: 'arunoda'});
+      var token = user.services.resume.loginTokens[0].token;
+
+      FastRender.route('/', function() {
+        this.completeSubscriptions(Meteor.userId());
+      }); 
+
+      FastRender._processRoutes('/', token, function(data) {
+        emit('return', {
+          subscriptions: data.subscriptions, 
+          user: user
+        });
+      });      
+    });
+
+    var expected = {};
+    expected[data.user._id] = true;
+    assert.deepEqual(data.subscriptions, expected);
+    done();
+  });
 });
