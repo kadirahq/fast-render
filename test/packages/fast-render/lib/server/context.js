@@ -11,13 +11,13 @@ Context = function Context(loginToken) {
     var query = {'services.resume.loginTokens.token': loginToken};
     var options = {fields: {_id: 1}};
     var user = Meteor.users.findOne(query, options);
+
+    //support for Meteor.user
+    Fibers.current._meteor_dynamics = {};
+    Fibers.current._meteor_dynamics[DDP._CurrentInvocation.slot] = this;
+
     if(user) {
       this.userId = user._id;
-      //support for Meteor.user
-      Fibers.current._meteor_dynamics = {};
-      Fibers.current._meteor_dynamics[DDP._CurrentInvocation.slot] = {
-        userId: user._id
-      };
     }
   }
 };
