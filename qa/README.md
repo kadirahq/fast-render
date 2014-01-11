@@ -28,3 +28,5 @@ In this case, we are testing routes directly using `this.route` with waitOn. Aga
 
 Do any of the above Telescope's scenarios with the user loggedIn. Try with the same with logging out.
 
+> try this scenario with unsetting `DDP_DEFAULT_CONNECTION_URL`
+
