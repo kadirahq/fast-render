@@ -49,5 +49,5 @@ function isIronRouterExists() {
   var fs = Npm.require('fs');
   var path = Npm.require('path');
   var meteorPackages = fs.readFileSync(path.resolve('.meteor/packages'), 'utf8');
-  return !!meteorPackages.match(/iron-router\n/);
+  return !!meteorPackages.match(/iron-router/);
 }
