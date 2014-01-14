@@ -10,9 +10,9 @@ Package.on_use(function(api) {
   api.use(['minimongo', 'livedata', 'mongo-livedata', 'ejson', 'underscore', 'webapp'], ['server']);
   api.use(['underscore', 'deps', 'ejson'], ['client']);
 
-  //this is needed since, we are depending on the iron-router on the smart.json
-  //so if the user has iron-router we need to do a weak dependacy on them
-  //if the user has no iron-router installed, direct call to weak dependancy throws an error
+  // This is needed due to Meteor Issue #1358
+  //   https://github.com/meteor/meteor/issues/1358
+  // The 'weak' flag doesn't support non-core (ie. atmosphere) packages yet.
   if(isIronRouterExists()) {
     api.use(['iron-router'], ['client', 'server'], {weak: true});
   }
