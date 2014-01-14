@@ -141,6 +141,45 @@ suite('DDP', function() {
       ])
 
       done();
-    })
+    });
+
+    test('added-fix:ignore-simulations', function(done, server, client) {
+      server.evalSync(function() {
+        Posts = new Meteor.Collection('posts');
+        Posts.allow({
+          insert: function() {return true;}
+        });
+
+        Meteor.publish('abc', function() {
+          return Posts.find();
+        });
+        emit('return');
+      });
+
+      client.evalSync(function() {
+        Posts = new Meteor.Collection('posts');
+        Meteor.subscribe('abc');
+        emit('return');
+      });
+
+      Wait(server, 500);
+
+      client.evalSync(function() {
+        Posts.insert({_id: "cool", abc: 100});
+        emit('return');
+      });
+
+      Wait(server, 200);
+
+      var posts = client.evalSync(function() {
+        emit('return', Posts.find().fetch());
+      });
+
+      assert.deepEqual(posts, [
+        {_id: 'cool', abc: 100}
+      ])
+
+      done();
+    });
   });
 });
