@@ -28,6 +28,18 @@ http.OutgoingMessage.prototype.write = function(chunk, encoding) {
   //prevent hijacking other http requests
   if(this.queryData && !this.injected && 
     encoding === undefined && /<!DOCTYPE html>/.test(chunk)) {
+
+    //if cors headers included if may cause some security holes. see more: 
+    //so we simply turn off fast-render if we detect an cors header
+    //read more: http://goo.gl/eGwb4e
+    if(this._headers['access-control-allow-origin']) {
+      var wanrMessage = 
+        'warn: fast-render turned off due to CORS headers. read more: http://goo.gl/eGwb4e';
+      console.warn(wanrMessage);
+      originalWrite.call(this, chunk, encoding);
+      return;
+    }
+
     //inject config
     if(injectConfigTemplate) {
       var jsonContent = JSON.stringify({
@@ -56,6 +68,7 @@ http.OutgoingMessage.prototype.write = function(chunk, encoding) {
 
     this.injected = true;
   }
+
   originalWrite.call(this, chunk, encoding);
 };
 
