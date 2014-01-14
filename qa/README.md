@@ -30,3 +30,8 @@ Do any of the above Telescope's scenarios with the user loggedIn. Try with the s
 
 > try this scenario with unsetting `DDP_DEFAULT_CONNECTION_URL`
 
+### CORS security issues
+
+Visit `/best` and see fast-render is disabled. 
+
+For more on the related story. check: http://goo.gl/eGwb4e

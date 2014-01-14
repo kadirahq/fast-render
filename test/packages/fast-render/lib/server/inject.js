@@ -95,5 +95,7 @@ WebApp.connectHandlers.use(function(req, res, next) {
       next();
     });
     //run our route handlers and add proper queryData
+  } else {
+    next();
   }
 });
