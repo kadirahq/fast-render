@@ -16,13 +16,17 @@ Meteor.default_connection._livedata_data = function(msg) {
     return originalLivedataData.call(this, msg);
   }
 
-  //we are inserting docs to a collection manually
-  //but when the data comes from the subscription, it will also try to insert
-  //but since there are some exiting data, meteor throws an execption
+  // //we are inserting docs to a collection manually
+  // //but when the data comes from the subscription, it will also try to insert
+  // //but since there are some exiting data, meteor throws an execption
 
   //we need to keep this up, even after revertedBackToOriginal due to that, 
   //forgetSubscriptions() need this, if it receives data from the server from a new subscription
-  if(msg.msg == 'added') {
+  //  serverDoc check is to see, if this doc is releated to an simulation, 
+  //  if so it's better to ignore it
+  //think: ditch forgetSubscriptions() API
+  var serverDoc = Meteor._get(this._serverDocuments, msg.collection, msg.id);
+  if(!serverDoc && msg.msg == 'added') {
     var localCollection = Meteor.default_connection._mongo_livedata_collections[msg.collection];
     if(localCollection) {
       var existingDoc = localCollection.findOne(msg.id);
@@ -87,4 +91,3 @@ Meteor.default_connection._send = function(msg) {
 
   return originalSend.call(this, msg);
 };
-
