@@ -11,6 +11,10 @@ Meteor.subscribe = function(subscription) {
 //assuming, no runtime routes will be added
 Meteor.startup(function() {
   Router.routes.forEach(function(route) {
+    //resolve controller class
+    if(route.options && typeof route.options.controller == 'string') {
+      route.options.controller = this[route.options.controller];
+    }
     handleRoute(route.name, route.options);
   });
 });
