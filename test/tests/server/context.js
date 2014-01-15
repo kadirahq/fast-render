@@ -54,23 +54,6 @@ suite('Context', function() {
     done();
   });
 
-  test('forgetSubscriptions', function(done, server) {
-    var subs = server.evalSync(function() {
-      var c = new FastRender._Context();
-      c.forgetSubscriptions(['abc', 'bbc']);
-      c.forgetSubscriptions('ccc');
-
-      emit('return', c._forgetSubscriptions);
-    });
-
-    assert.deepEqual(subs, {
-      abc: true,
-      bbc: true,
-      ccc: true
-    });
-    done();
-  });
-
   test('completeSubscriptions', function(done, server) {
     var subs = server.evalSync(function() {
       var c = new FastRender._Context();

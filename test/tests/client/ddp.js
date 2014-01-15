@@ -14,7 +14,6 @@ suite('DDP', function() {
       var data = client.evalSync(function() {
         __fast_render_config = {
           subscriptions: {abc: true},
-          forgetSubscriptions: {},
           subscriptionIdMap: {}
         };
         Meteor.default_connection._livedata_data = function(msg) {
@@ -36,43 +35,6 @@ suite('DDP', function() {
       assert.deepEqual(idMap, data.frData.subscriptionIdMap);
       done();
     });
-
-    test('forgetSubscriptions support', function(done, server, client) {
-      server.evalSync(function() {
-        Posts = new Meteor.Collection('posts');
-        Meteor.publish('abc', function() {
-          return Posts.find();
-        });
-        emit('return');
-      });
-
-      var data = client.evalSync(function() {
-        __fast_render_config = {
-          subscriptions: {abc: true},
-          forgetSubscriptions: {abc: true},
-          subscriptionIdMap: {}
-        };
-        Meteor.default_connection._livedata_data = function(msg) {
-          if(msg.frGen) {
-            setTimeout(function() {
-              emit('return', {
-                msg: msg, 
-                frData: __fast_render_config
-              });
-            }, 0);
-          }
-        };
-
-        Meteor.subscribe('abc');
-      });
-
-      assert.deepEqual(data.frData, {
-        subscriptions: {},
-        forgetSubscriptions: {},
-        subscriptionIdMap: {}
-      });
-      done();
-    });
   });
 
   suite('._livedata_data', function() {
@@ -88,7 +50,7 @@ suite('DDP', function() {
       client.evalSync(function() {
         __fast_render_config = {
           subscriptions: {abc: true},
-          forgetSubscriptions: {},
+
           subscriptionIdMap: {},
           loadedSubscriptions: {}
         };
@@ -104,7 +66,6 @@ suite('DDP', function() {
 
       assert.deepEqual(frData, {
         subscriptions: {},
-        forgetSubscriptions: {},
         subscriptionIdMap: {},
         loadedSubscriptions: {abc: true}
       });
@@ -123,6 +84,8 @@ suite('DDP', function() {
       });
 
       client.evalSync(function() {
+        //to make sure, revertedBackToOriginal is never happening
+        __fast_render_config.subscriptions['fake-one'] = true;
         Posts = new Meteor.Collection('posts');
         Meteor.subscribe('abc');
         emit('return');
