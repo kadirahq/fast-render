@@ -1,5 +1,5 @@
 Package.describe({
-  "summery": "a way to render the initial page super fast!"
+  "summary": "a way to render the initial page super fast!"
 });
 
 Npm.depends({
