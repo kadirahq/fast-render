@@ -69,8 +69,12 @@ Context.prototype.subscribe = function(subscription /*, params */) {
 
       //add collection data
       cursors.forEach(function(cursor) {
+        console.log(cursor);
         cursor.rewind();
-        var collectionName = cursor._cursorDescription.collectionName;
+        var collectionName = 
+          (cursor._cursorDescription)? cursor._cursorDescription.collectionName: null || //for meteor-collections
+          (cursor._collection)? cursor._collection._name: null; //for smart-collections
+
         self._ensureCollection(collectionName);
         self._collectionData[collectionName].push(cursor.fetch());
       });
