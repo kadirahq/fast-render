@@ -1,3 +1,6 @@
+var fs = Npm.require('fs');
+var path = Npm.require('path');
+
 Package.describe({
   "summary": "a way to render the initial page super fast!"
 });
@@ -16,6 +19,11 @@ Package.on_use(function(api) {
   if(isIronRouterExists()) {
     api.use(['iron-router'], ['client', 'server'], {weak: true});
   }
+
+  //a hack to detect if IR has been added or removed from the app
+  //  if IR was not there on the app and added later, FR cannot detect it,
+  //  since Meteor caches packages. this is how we force FR to invalidate the cache.
+  api.add_files('../../.meteor/packages', ['client', 'server']);
 
   api.add_files([
     'lib/server/inject_data.html',
@@ -46,8 +54,6 @@ Package.on_use(function(api) {
 });
 
 function isIronRouterExists() {
-  var fs = Npm.require('fs');
-  var path = Npm.require('path');
   var meteorPackages = fs.readFileSync(path.resolve('.meteor/packages'), 'utf8');
   return !!meteorPackages.match(/iron-router/);
 }

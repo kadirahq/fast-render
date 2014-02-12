@@ -3,6 +3,6 @@
   "description": "FastRender loads your Meteor app super faster ",
   "homepage": "https://github.com/arunoda/meteor-fast-render",
   "author": "Arunoda Susiripala <arunoda.susiripala@gmail.com>",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "git": "https://github.com/arunoda/meteor-fast-render.git"
 }
