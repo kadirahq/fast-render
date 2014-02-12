@@ -1,0 +1,15 @@
+{
+  "meteor": {},
+  "dependencies": {
+    "basePackages": {
+      "fast-render": {
+        "path": "."
+      }
+    },
+    "packages": {
+      "fast-render": {
+        "path": "."
+      }
+    }
+  }
+}
