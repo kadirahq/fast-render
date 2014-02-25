@@ -46,11 +46,13 @@ suite('Routes', function() {
     done();
   });
 
-  test('loginToken', function(done, server, client) {
+  test('loginToken-g', function(done, server, client) {
     client.evalSync(laika.actions.createUser, {username: 'arunoda', password: '123456'});
-    var data = server.evalSync(function() {
+    var token = client.evalSync(function() {
+      emit('return', Meteor._localStorage.getItem('Meteor.loginToken'));
+    });
+    var data = server.evalSync(function(token) {
       var user = Meteor.users.findOne({username: 'arunoda'});
-      var token = user.services.resume.loginTokens[0].token;
 
       FastRender.route('/', function() {
         this.completeSubscriptions(this.userId);
@@ -62,7 +64,7 @@ suite('Routes', function() {
           user: user
         });
       });      
-    });
+    }, token);
 
     var expected = {};
     expected[data.user._id] = true;
@@ -72,9 +74,11 @@ suite('Routes', function() {
 
   test('loginToken:Meteor.userId', function(done, server, client) {
     client.evalSync(laika.actions.createUser, {username: 'arunoda', password: '123456'});
-    var data = server.evalSync(function() {
+    var token = client.evalSync(function() {
+      emit('return', Meteor._localStorage.getItem('Meteor.loginToken'));
+    }); 
+    var data = server.evalSync(function(token) {
       var user = Meteor.users.findOne({username: 'arunoda'});
-      var token = user.services.resume.loginTokens[0].token;
 
       var userId = "should have some id";
       FastRender.route('/', function() {
@@ -87,7 +91,7 @@ suite('Routes', function() {
           user: user
         });
       });      
-    });
+    }, token);
 
     assert.equal(data.user._id, data.userId);
     done();
