@@ -6,7 +6,7 @@ Package.describe({
 });
 
 Npm.depends({
-  "connect": "2.12.0"
+  "connect": "2.13.0"
 });
 
 Package.on_use(function(api) {
