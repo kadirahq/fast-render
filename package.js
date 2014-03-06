@@ -53,7 +53,32 @@ Package.on_use(function(api) {
   api.export('__init_fast_render', ['client']);
 });
 
+function isAppDir(filepath) {
+  try {
+    return fs.statSync(path.join(filepath, '.meteor', 'packages')).isFile();
+  } catch (e) {
+    return false;
+  }
+}
+
+function meteorRoot() {
+  var testDir = process.cwd();
+
+  while (testDir) {
+    if (isAppDir(testDir))
+      break;
+
+    var newDir = path.dirname(testDir);
+    if (newDir === testDir)
+      return null;
+
+    testDir = newDir;
+  }
+
+  return testDir;
+}
+
 function isIronRouterExists() {
-  var meteorPackages = fs.readFileSync(path.resolve('.meteor/packages'), 'utf8');
+  var meteorPackages = fs.readFileSync(path.join(meteorRoot(), '.meteor', 'packages'), 'utf8');
   return !!meteorPackages.match(/iron-router/);
 }
