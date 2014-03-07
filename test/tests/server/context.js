@@ -156,7 +156,6 @@ suite('Context', function() {
       emit('return', c.getData());
     });
 
-    // throw new Error(JSON.stringify(contextData));
     assert.deepEqual(contextData, {
       collectionData: {
         "posts": [[
