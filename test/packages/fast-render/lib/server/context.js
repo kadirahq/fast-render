@@ -73,7 +73,7 @@ Context.prototype.subscribe = function(subscription /*, params */) {
     });
 
     var params = Array.prototype.slice.call(arguments, 1);
-    var cursors = publishHandler.apply(PublishContext, params);
+    var cursors = publishHandler.apply(publishContext, params);
 
     if(cursors) {
       //the publish function returned a cursor
