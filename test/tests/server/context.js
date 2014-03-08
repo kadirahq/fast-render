@@ -121,37 +121,85 @@ suite('Context', function() {
     done();
   });
 
-  test('subscribe:for-smart-collections', function(done, server, client) {
+  test('subscribe:manual-observe', function(done, server, client) {
     var contextData = server.evalSync(function() {
-      Posts = new Meteor.SmartCollection('posts');
+      Posts = new Meteor.Collection('posts');
       Posts.insert({_id: '1', text: 'one', type: 'a'});
       Posts.insert({_id: '2', text: 'two', type: 'a'});
       Posts.insert({_id: 'three', text: 'two', type: 'b'});
 
       Meteor.publish('posts', function(type) {
-        return Posts.find({type: type}, {sort: {_id: -1}});
+        var postCursor = Posts.find({type: type}, {sort: {_id: -1}});
+        var self = this;
+
+        var handle = postCursor.observeChanges({
+          added: function(id, fields) {
+            self.added('posts', id, fields);
+          },
+          changed: function(id, fields) {
+            self.changed('posts', id, fields);
+          },
+          removed: function(id) {
+            self.removed('tracks', id);
+          }
+        });
+
+        this.ready();
+
+        this.onStop(function() {
+          handle.stop();
+        });
       });
 
       var c = new FastRender._Context();
       c.subscribe('posts', 'a');
-      emit('return', {
-        _collectionData: c._collectionData,
-        _subscriptions: c._subscriptions 
-      });
+      emit('return', c.getData());
     });
 
     assert.deepEqual(contextData, {
-      _collectionData: {
+      collectionData: {
         "posts": [[
-          {_id: '2', text: 'two', type: 'a'},
           {_id: '1', text: 'one', type: 'a'},
+          {_id: '2', text: 'two', type: 'a'},
         ]]
       },
-      _subscriptions: {'posts': true}
+      subscriptions: {'posts': true}
     });
 
     done();
   });
+
+  // test('subscribe:for-smart-collections', function(done, server, client) {
+  //   var contextData = server.evalSync(function() {
+  //     Posts = new Meteor.SmartCollection('posts');
+  //     Posts.insert({_id: '1', text: 'one', type: 'a'});
+  //     Posts.insert({_id: '2', text: 'two', type: 'a'});
+  //     Posts.insert({_id: 'three', text: 'two', type: 'b'});
+
+  //     Meteor.publish('posts', function(type) {
+  //       return Posts.find({type: type}, {sort: {_id: -1}});
+  //     });
+
+  //     var c = new FastRender._Context();
+  //     c.subscribe('posts', 'a');
+  //     emit('return', {
+  //       _collectionData: c._collectionData,
+  //       _subscriptions: c._subscriptions 
+  //     });
+  //   });
+
+  //   assert.deepEqual(contextData, {
+  //     _collectionData: {
+  //       "posts": [[
+  //         {_id: '2', text: 'two', type: 'a'},
+  //         {_id: '1', text: 'one', type: 'a'},
+  //       ]]
+  //     },
+  //     _subscriptions: {'posts': true}
+  //   });
+
+  //   done();
+  // });
 
   test('completeSubscriptions', function(done, server) {
     var subs = server.evalSync(function() {
