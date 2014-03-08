@@ -33,6 +33,7 @@ Package.on_use(function(api) {
   api.add_files([
     'lib/server/utils.js',
     'lib/server/fast_render.js',
+    'lib/server/publish_context.js',
     'lib/server/context.js',
     'lib/server/inject.js',
     'lib/server/iron_router_support.js',
