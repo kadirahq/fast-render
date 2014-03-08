@@ -4,6 +4,7 @@ PublishContext = function PublishContext(context, subscription) {
   this._context = context;
   this._collectionData = {};
   this._onStop = [];
+  this._stopped = false;
 };
 
 PublishContext.prototype._ensureCollection = function(collection) {
@@ -28,9 +29,7 @@ PublishContext.prototype.changed = function(collection, id, fields) {
 
   collectionData[collection] = collectionData[collection].map(function(doc) {
     if (doc._id === id) {
-      var newDoc = _.clone(fields);
-      newDoc._id = id;
-      return newDoc;
+      return _.extend(doc, fields);
     }
 
     return doc;
@@ -46,10 +45,15 @@ PublishContext.prototype.removed = function(collection, id) {
 };
 
 PublishContext.prototype.onStop = function(cb) {
+  if (this._stopped)
+    cb();
+
   this._onStop.push(cb);
 };
 
 PublishContext.prototype.ready = function() {
+  this._stopped = true;
+
   //make the subscription be marked as ready
   this._context.completeSubscriptions(this._subscription);
 
