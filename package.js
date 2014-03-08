@@ -62,20 +62,20 @@ function isAppDir(filepath) {
 }
 
 function meteorRoot() {
-  var testDir = process.cwd();
+  var currentDir = process.cwd();
+  while (currentDir) {
+    var newDir = path.dirname(currentDir);
 
-  while (testDir) {
-    if (isAppDir(testDir))
+    if (isAppDir(currentDir)) {
       break;
-
-    var newDir = path.dirname(testDir);
-    if (newDir === testDir)
+    } else if (newDir === currentDir) {
       return null;
-
-    testDir = newDir;
+    } else {
+      currentDir = newDir;
+    }
   }
 
-  return testDir;
+  return currentDir;
 }
 
 function isIronRouterExists() {
