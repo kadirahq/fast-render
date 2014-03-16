@@ -99,7 +99,7 @@ WebApp.connectHandlers.use(Npm.require('connect').cookieParser());
 WebApp.connectHandlers.use(function(req, res, next) {
   if(appUrl(req.url)) {
     var loginToken = req.cookies['meteor_login_token'];
-    FastRender._processRoutes(req.url, loginToken, function(queryData) {
+    FastRender._processRoutes(req.url, loginToken, req.headers, function(queryData) {
       res.queryData = queryData;
       if(res.queryData) {
         res.queryData.serverRoutePath = req.url;

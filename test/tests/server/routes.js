@@ -7,7 +7,7 @@ suite('Routes', function() {
         this.completeSubscriptions(params.user);
       });
 
-      FastRender._processRoutes('/arunoda', null, function(data) {
+      FastRender._processRoutes('/arunoda', null, {}, function(data) {
         emit('return', data);
       });
     });
@@ -22,7 +22,7 @@ suite('Routes', function() {
         this.completeSubscriptions(params.user);
       });
 
-      FastRender._processRoutes('/arunoda', null, function(data) {
+      FastRender._processRoutes('/arunoda', null, {}, function(data) {
         emit('return', data);
       });
     });
@@ -37,7 +37,7 @@ suite('Routes', function() {
         this.completeSubscriptions(path);
       });
 
-      FastRender._processRoutes('arunoda', null, function(data) {
+      FastRender._processRoutes('arunoda', null, {}, function(data) {
         emit('return', data);
       });
     });
@@ -58,7 +58,7 @@ suite('Routes', function() {
         this.completeSubscriptions(this.userId);
       }); 
 
-      FastRender._processRoutes('/', token, function(data) {
+      FastRender._processRoutes('/', token, {}, function(data) {
         emit('return', {
           subscriptions: data.subscriptions, 
           user: user
@@ -85,7 +85,7 @@ suite('Routes', function() {
         userId = Meteor.userId();
       }); 
 
-      FastRender._processRoutes('/', token, function(data) {
+      FastRender._processRoutes('/', token, {}, function(data) {
         emit('return', {
           userId: userId, 
           user: user
@@ -104,12 +104,28 @@ suite('Routes', function() {
         userId = Meteor.userId();
       }); 
 
-      FastRender._processRoutes('/', null, function(data) {
+      FastRender._processRoutes('/', null, {}, function(data) {
         emit('return', userId);
       });      
     });
 
     assert.equal(userId, null);
+    done();
+  });
+
+  test('router headers', function(done, server, client) {
+    var headers = server.evalSync(function() {
+      var headers;
+      FastRender.route('/', function(params) {
+        headers = this.headers;
+      });
+
+      FastRender._processRoutes('/', null, { 'test-header': 'should-exist' }, function(data) {
+        emit('return', headers);
+      });
+    });
+
+    assert.deepEqual(headers, {'test-header': 'should-exist'})
     done();
   });
 });
