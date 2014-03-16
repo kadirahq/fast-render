@@ -116,7 +116,7 @@ suite('Routes', function() {
   test('router headers', function(done, server, client) {
     var data = server.evalSync(function() {
       FastRender.route('/', function(params) {
-        this.completeSubscriptions(params.user);
+
       });
 
       FastRender._processRoutes('/', null, { 'test-header', 'should-exist' }, function(data) {
