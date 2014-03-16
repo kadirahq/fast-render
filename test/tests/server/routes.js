@@ -114,17 +114,18 @@ suite('Routes', function() {
   });
 
   test('router headers', function(done, server, client) {
-    var data = server.evalSync(function() {
+    var headers = server.evalSync(function() {
+      var headers;
       FastRender.route('/', function(params) {
-
+        headers = this.headers;
       });
 
-      FastRender._processRoutes('/', null, { 'test-header', 'should-exist' }, function(data) {
-        emit('return', this);
+      FastRender._processRoutes('/', null, { 'test-header': 'should-exist' }, function(data) {
+        emit('return', headers);
       });
     });
 
-    assert.deepEqual(data.headers, {'test-header': 'should-exist'})
+    assert.deepEqual(headers, {'test-header': 'should-exist'})
     done();
   });
 });
