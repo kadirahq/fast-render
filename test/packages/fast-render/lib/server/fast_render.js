@@ -18,7 +18,7 @@ FastRender.onAllRoutes = function onAllRoutes(callback) {
   FastRender._onAllRoutes.push(callback);
 };
 
-FastRender._processRoutes = function _processRoutes(path, loginToken, callback) {
+FastRender._processRoutes = function _processRoutes(path, loginToken, headers, callback) {
   var selectedRoute;
   var params;
 
@@ -32,7 +32,7 @@ FastRender._processRoutes = function _processRoutes(path, loginToken, callback) 
   }
 
   Fiber(function() {
-    var context = new Context(loginToken);
+    var context = new Context(loginToken, { headers: headers });
     try {
       //run onAllRoutes callbacks if provided
       FastRender._onAllRoutes.forEach(function(callback) {

@@ -112,4 +112,19 @@ suite('Routes', function() {
     assert.equal(userId, null);
     done();
   });
+
+  test('router headers', function(done, server, client) {
+    var data = server.evalSync(function() {
+      FastRender.route('/', function(params) {
+        this.completeSubscriptions(params.user);
+      });
+
+      FastRender._processRoutes('/', null, { 'test-header', 'should-exist' }, function(data) {
+        emit('return', this);
+      });
+    });
+
+    assert.deepEqual(data.headers, {'test-header': 'should-exist'})
+    done();
+  });
 });
