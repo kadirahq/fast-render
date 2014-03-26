@@ -31,6 +31,10 @@ Package.on_use(function(api) {
   ], 'server', {isAsset: true}); 
 
   api.add_files([
+    'lib/utils.js'
+  ], ['client', 'server']);
+
+  api.add_files([
     'lib/server/utils.js',
     'lib/server/fast_render.js',
     'lib/server/publish_context.js',

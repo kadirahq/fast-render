@@ -1,5 +1,5 @@
 __init_fast_render = function(ejsonJson) {
-  var initData = EJSON.fromJSONValue(ejsonJson);
+  var initData = DecodeEJSON(ejsonJson);
 
   //loading data into the collection
   for(var collName in initData.collectionData) {
