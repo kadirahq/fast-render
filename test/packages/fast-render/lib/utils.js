@@ -1,9 +1,9 @@
 EncodeEJSON = function(ejson) {
   var ejsonString = EJSON.stringify(ejson);
-  return _.escape(ejsonString);
+  return encodeURI(ejsonString);
 };
 
 DecodeEJSON = function(encodedEjson) {
-  var decodedEjsonString = _.unescape(encodedEjson);
+  var decodedEjsonString = decodeURI(encodedEjson);
   return EJSON.fromJSONValue(JSON.parse(decodedEjsonString));
 };
