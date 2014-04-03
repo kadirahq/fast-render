@@ -1,2 +1,3 @@
 .tmp-qa
 .build*
+.npm
