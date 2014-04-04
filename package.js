@@ -11,7 +11,7 @@ Npm.depends({
 
 Package.on_use(function(api) {
   api.use(['minimongo', 'livedata', 'mongo-livedata', 'ejson', 'underscore', 'webapp', 'routepolicy', 'accounts-base'], ['server']);
-  api.use(['underscore', 'deps', 'ejson'], ['client']);
+  api.use(['underscore', 'deps', 'ejson', 'accounts-base'], ['client']);
 
   // This is needed due to Meteor Issue #1358
   //   https://github.com/meteor/meteor/issues/1358
