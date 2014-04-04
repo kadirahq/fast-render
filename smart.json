@@ -3,6 +3,6 @@
   "description": "Fast Render improves the initial load time of your app and gives you 2-10 times faster page loads",
   "homepage": "https://github.com/arunoda/meteor-fast-render",
   "author": "Arunoda Susiripala <arunoda.susiripala@gmail.com>",
-  "version": "0.1.24",
+  "version": "0.1.25",
   "git": "https://github.com/arunoda/meteor-fast-render.git"
 }
