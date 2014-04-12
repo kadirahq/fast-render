@@ -18,18 +18,29 @@ Meteor.startup(function() {
     handleRoute(route.name, route.options);
   });
 
-  var globalWaitOn = Router.options && Router.options.waitOn;
-  if(typeof globalWaitOn == 'function') {
-    FastRender.onAllRoutes(function(path) {
-      var self = this;
-      
-      currentSubscriptions = [];
-      globalWaitOn.call({path: path});
-      currentSubscriptions.forEach(function(args) {
-        self.subscribe.apply(self, args);
-      });
+  var globalWaitOns = [];
+  if(Router.options && typeof Router.options.waitOn == 'function') {
+    //for 0.6.x
+    globalWaitOns.push(Router.options.waitOn);
+  } else if(Router._globalHooks && Router._globalHooks.waitOn && Router._globalHooks.waitOn.length > 0) {
+    //for 0.7.x
+    Router._globalHooks.waitOn.forEach(function(waitOn) {
+      globalWaitOns.push(waitOn.hook);
     });
   }
+  
+  FastRender.onAllRoutes(function(path) {
+    var self = this;
+    
+    currentSubscriptions = [];
+    globalWaitOns.forEach(function(waitOn) {
+      waitOn.call({path: path});
+    });
+    
+    currentSubscriptions.forEach(function(args) {
+      self.subscribe.apply(self, args);
+    });
+  });
 });
 
 function handleRoute(name, options) {
@@ -71,6 +82,7 @@ function handleRoute(name, options) {
   }
 
   function getPath() {
+    name = (name == "/")? "" : name;
     return options.path || ("/" + name);
   }
 }
