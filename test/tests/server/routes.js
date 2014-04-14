@@ -97,7 +97,7 @@ suite('Routes', function() {
     done();
   });
 
-  test('nologinToken:Meteor.userId', function(done, server, client) {
+  test('nologinToken:Meteor.userId', function(done, server) {
     var userId = server.evalSync(function() {
       var userId = 'should be null';
       FastRender.route('/', function() {
@@ -113,7 +113,7 @@ suite('Routes', function() {
     done();
   });
 
-  test('router headers', function(done, server, client) {
+  test('router headers', function(done, server) {
     var headers = server.evalSync(function() {
       var headers;
       FastRender.route('/', function(params) {
@@ -126,6 +126,31 @@ suite('Routes', function() {
     });
 
     assert.deepEqual(headers, {'test-header': 'should-exist'})
+    done();
+  });
+
+  test('null publications', function(done, server) {
+    var data = server.evalSync(function() {
+      var Posts = new Meteor.Collection('posts');
+      Posts.insert({_id: 'one', data: 'abc'});
+
+      Meteor.publish(null, function() {
+        return Posts.find();
+      });
+
+      FastRender.route('/:user', function(params) {
+        this.completeSubscriptions(params.user);
+      });
+
+      FastRender._processRoutes('/arunoda', null, {}, function(data) {
+        emit('return', data);
+      });
+    });
+
+    assert.deepEqual(data.subscriptions, {arunoda: true})
+    assert.deepEqual(data.collectionData, {
+      posts: [[{_id: 'one', data: 'abc'}]]
+    });
     done();
   });
 });
