@@ -85,7 +85,18 @@ Context.prototype.processPublication = function(publishHandler, publishContext, 
     }
   });
 
-  var cursors = publishHandler.apply(publishContext, params);
+  var cursors;
+
+  try {
+    cursors = publishHandler.apply(publishContext, params);
+  } catch(ex) {
+    console.warn('error caught on publication: ', publishContext._subscription, ': ', ex.message);
+    // since, this subscription caught on an error we can't proceed.
+    // but we can't also throws an error since other publications might have something useful
+    // So, it's not fair to ignore running them due to error of this sub
+    // this might also be failed due to the use of some private API's of Meteor's Susbscription class
+    publishContext.ready();
+  }
 
   if(cursors) {
     //the publish function returned a cursor
