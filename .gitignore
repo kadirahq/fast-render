@@ -1,3 +1,4 @@
 .tmp-qa
 .build*
 .npm
+test/packages/fast-render
