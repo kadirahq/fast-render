@@ -97,6 +97,29 @@ suite('Routes', function() {
     done();
   });
 
+  test('loginToken:null-login-token', function(done, server, client) {
+    client.evalSync(laika.actions.createUser, {username: 'arunoda', password: '123456'}); 
+    var data = server.evalSync(function() {
+      var token = null;
+      var user = Meteor.users.findOne({username: 'arunoda'});
+
+      var userId = "should be null";
+      FastRender.route('/', function() {
+        userId = Meteor.userId();
+      }); 
+
+      FastRender._processRoutes('/', token, {}, function(data) {
+        emit('return', {
+          userId: userId, 
+          user: user
+        });
+      });      
+    });
+
+    assert.equal(data.userId, null);
+    done();
+  });
+
   test('nologinToken:Meteor.userId', function(done, server) {
     var userId = server.evalSync(function() {
       var userId = 'should be null';
