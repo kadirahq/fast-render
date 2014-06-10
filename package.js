@@ -28,7 +28,7 @@ Package.on_use(function(api) {
   api.add_files([
     'lib/server/inject_data.html',
     'lib/server/inject_config.html',
-  ], 'server', {isAsset: true}); 
+  ], 'server', {isAsset: true});
 
   api.add_files([
     'lib/utils.js'
@@ -41,7 +41,7 @@ Package.on_use(function(api) {
     'lib/server/context.js',
     'lib/server/inject.js',
     'lib/server/iron_router_support.js',
-  ], 'server');  
+  ], 'server');
 
   api.add_files([
     'lib/vendor/cookies.js',
@@ -52,7 +52,7 @@ Package.on_use(function(api) {
     'lib/client/data_handler.js',
     'lib/client/iron_router_support.js',
     'lib/client/auth.js'
-  ], 'client'); 
+  ], 'client');
 
   api.export('FastRender', ['client', 'server']);
   api.export('__init_fast_render', ['client']);
@@ -84,6 +84,12 @@ function meteorRoot() {
 }
 
 function isIronRouterExists() {
-  var meteorPackages = fs.readFileSync(path.join(meteorRoot(), '.meteor', 'packages'), 'utf8');
-  return !!meteorPackages.match(/iron-router/);
+  try {
+    var meteorPackages = fs.readFileSync(path.join(meteorRoot(), '.meteor', 'packages'), 'utf8');
+    return !!meteorPackages.match(/iron-router/);
+  } catch(ex) {
+    // seems like FastRender running outside a Meteor app (ie: with tinytest)
+    // So there is no iron-router
+    return false;
+  }
 }
