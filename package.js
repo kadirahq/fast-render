@@ -17,7 +17,6 @@ Package.on_use(function(api) {
   //   https://github.com/meteor/meteor/issues/1358
   // The 'weak' flag doesn't support non-core (ie. atmosphere) packages yet.
   if(isMeteorAppWithIronRouterDependency() || isPackageWithIronRouterDependency()) {
-
     // the app or package uses iron-router -> so we can use it too!
     api.use(['iron-router'], ['client', 'server']);
   }
@@ -107,11 +106,9 @@ function isMeteorAppWithIronRouterDependency() {
 }
 
 function isPackageWithIronRouterDependency() {
-
   var processDirectory = process.cwd();
-
+  
   if(isPackageDirectory(processDirectory)) {
-
     var packageFile = fs.readFileSync(path.join(processDirectory, 'package.js'), 'utf8');
     return !!packageFile.match(/iron-router/);
   }
