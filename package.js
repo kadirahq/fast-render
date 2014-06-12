@@ -15,13 +15,12 @@ Package.on_use(function(api) {
 
   // This is needed due to Meteor Issue #1358
   //   https://github.com/meteor/meteor/issues/1358
-  // The 'weak' flag doesn't support non-core (ie. atmosphere) packages yet.
   if(isMeteorAppWithIronRouterDependency() || isPackageWithIronRouterDependency()) {
     // the app or package uses iron-router -> so we can use it too!
     api.use(['iron-router'], ['client', 'server']);
   }
 
-  if(isMeteorAppWithIronRouterDependency()) {
+  if(isAppDir('./')) {
     //a hack to detect if IR has been added or removed from the app
     //  if IR was not there on the app and added later, FR cannot detect it,
     //  since Meteor caches packages. this is how we force FR to invalidate the cache.
@@ -107,7 +106,7 @@ function isMeteorAppWithIronRouterDependency() {
 
 function isPackageWithIronRouterDependency() {
   var processDirectory = process.cwd();
-  
+
   if(isPackageDirectory(processDirectory)) {
     var packageFile = fs.readFileSync(path.join(processDirectory, 'package.js'), 'utf8');
     return !!packageFile.match(/iron-router/);
