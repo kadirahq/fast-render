@@ -2,8 +2,9 @@ var fs = Npm.require('fs');
 var path = Npm.require('path');
 
 Package.describe({
-  "summary": "a way to render the initial page super fast!"
-  version: "1.0.0"
+  summary: "a way to render the initial page super fast!",
+  version: "1.0.0",
+  git: "https://github.com/Tarang/meteor-fast-render.git"
 });
 
 Npm.depends({
@@ -19,7 +20,7 @@ Package.on_use(function(api) {
   //   https://github.com/meteor/meteor/issues/1358
   if(isMeteorAppWithIronRouterDependency() || isPackageWithIronRouterDependency()) {
     // the app or package uses iron-router -> so we can use it too!
-    api.use(['iron-router'], ['client', 'server']);
+    api.use(['cmather:iron-router@0.8.2'], ['client', 'server']);
   }
 
   if(isAppDir('./')) {
