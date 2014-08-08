@@ -3,7 +3,7 @@ var path = Npm.require('path');
 
 Package.describe({
   summary: "a way to render the initial page super fast!",
-  version: "1.0.1",
+  version: "1.0.2",
   git: "https://github.com/Tarang/meteor-fast-render.git"
 });
 
