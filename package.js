@@ -3,7 +3,7 @@ var path = Npm.require('path');
 
 Package.describe({
   summary: "a way to render the initial page super fast!",
-  version: "1.0.0",
+  version: "1.0.1",
   git: "https://github.com/Tarang/meteor-fast-render.git"
 });
 
@@ -12,7 +12,7 @@ Npm.depends({
 });
 
 Package.on_use(function(api) {
-  if(api.versionsFrom) api.versionsFrom("METEOR-CORE@0.9.0-atm");
+  api.versionsFrom("METEOR-CORE@0.9.0-atm");
   api.use(['minimongo', 'livedata', 'mongo-livedata', 'ejson', 'underscore', 'webapp', 'routepolicy', 'accounts-base'], ['server']);
   api.use(['underscore', 'deps', 'ejson', 'accounts-base'], ['client']);
 
