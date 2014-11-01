@@ -13,8 +13,8 @@ Npm.depends({
 });
 
 Package.on_use(function(api) {
-  api.versionsFrom('METEOR@0.9.0');
-  api.use('iron:router@0.9.0', ['client', 'server'], {weak: true});
+  api.versionsFrom('METEOR@0.9.3');
+  api.use('iron:router@0.9.0 || 1.0.0', ['client', 'server'], {weak: true});
 
   api.use(['minimongo', 'livedata', 'mongo-livedata', 'ejson', 'underscore', 'webapp', 'routepolicy', 'accounts-base'], ['server']);
   api.use(['underscore', 'deps', 'ejson', 'accounts-base'], ['client']);
