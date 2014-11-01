@@ -15,6 +15,7 @@ Npm.depends({
 Package.on_use(function(api) {
   api.versionsFrom('METEOR@0.9.3');
   api.use('iron:router@0.9.0 || 1.0.0', ['client', 'server'], {weak: true});
+  api.use('chuangbo:cookie@1.1.0', 'client');
 
   api.use(['minimongo', 'livedata', 'mongo-livedata', 'ejson', 'underscore', 'webapp', 'routepolicy', 'accounts-base'], ['server']);
   api.use(['underscore', 'deps', 'ejson', 'accounts-base'], ['client']);
@@ -38,7 +39,6 @@ Package.on_use(function(api) {
   ], 'server');
 
   api.add_files([
-    'lib/vendor/cookies.js',
     'lib/vendor/deepExtend.js',
     'lib/client/log.js',
     'lib/client/fast_render.js',
