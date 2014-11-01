@@ -3,7 +3,7 @@ var path = Npm.require('path');
 
 Package.describe({
   "summary": "Render initial page 2-10 times faster by sending data with HTML",
-  "version": "1.1.3",
+  "version": "1.2.0",
   "git": "https://github.com/meteorhacks/fast-render",
   "name": "meteorhacks:fast-render"
 });
