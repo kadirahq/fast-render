@@ -3,7 +3,7 @@ var path = Npm.require('path');
 
 Package.describe({
   "summary": "Render initial page 2-10 times faster by sending data with HTML",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "git": "https://github.com/meteorhacks/fast-render",
   "name": "meteorhacks:fast-render"
 });
@@ -44,7 +44,6 @@ Package.on_use(function(api) {
     'lib/client/fast_render.js',
     'lib/client/ddp_update.js',
     'lib/client/data_handler.js',
-    'lib/client/iron_router_support.js',
     'lib/client/auth.js'
   ], 'client');
 
