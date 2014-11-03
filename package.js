@@ -39,7 +39,6 @@ Package.on_use(function(api) {
   ], 'server');
 
   api.add_files([
-    'lib/vendor/deepExtend.js',
     'lib/client/log.js',
     'lib/client/fast_render.js',
     'lib/client/ddp_update.js',
