@@ -3,7 +3,7 @@ var path = Npm.require('path');
 
 Package.describe({
   "summary": "Render initial page 2-10 times faster by sending data with HTML",
-  "version": "1.2.1",
+  "version": "2.0.0-rc2",
   "git": "https://github.com/meteorhacks/fast-render",
   "name": "meteorhacks:fast-render"
 });
@@ -17,7 +17,7 @@ Package.on_use(function(api) {
   api.use('iron:router@0.9.0 || 1.0.0', ['client', 'server'], {weak: true});
   api.use('chuangbo:cookie@1.1.0', 'client');
 
-  api.use(['minimongo', 'livedata', 'mongo-livedata', 'ejson', 'underscore', 'webapp', 'routepolicy', 'accounts-base'], ['server']);
+  api.use(['minimongo', 'livedata', 'ejson', 'underscore', 'webapp', 'routepolicy', 'accounts-base'], ['server']);
   api.use(['underscore', 'deps', 'ejson', 'accounts-base'], ['client']);
 
   api.add_files([

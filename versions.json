@@ -109,10 +109,6 @@
       "1.0.7"
     ],
     [
-      "mongo-livedata",
-      "1.0.6"
-    ],
-    [
       "observe-sequence",
       "1.0.3"
     ],
