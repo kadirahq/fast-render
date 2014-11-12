@@ -22,7 +22,6 @@ Package.on_use(function(api) {
 
   api.add_files([
     'lib/server/inject_data.html',
-    'lib/server/inject_config.html',
   ], 'server', {isAsset: true});
 
   api.add_files([
