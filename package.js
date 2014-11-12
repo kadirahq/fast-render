@@ -18,7 +18,7 @@ Package.on_use(function(api) {
   api.use('chuangbo:cookie@1.1.0', 'client');
 
   api.use(['minimongo', 'livedata', 'ejson', 'underscore', 'webapp', 'routepolicy', 'accounts-base'], ['server']);
-  api.use(['underscore', 'deps', 'ejson', 'accounts-base'], ['client']);
+  api.use(['minimongo', 'underscore', 'deps', 'ejson', 'accounts-base'], ['client']);
 
   api.add_files([
     'lib/server/inject_data.html',
