@@ -64,8 +64,8 @@ function configure (api) {
   ], 'server');
 
   api.addFiles([
-    'lib/client/log.js',
     'lib/client/fast_render.js',
+    'lib/client/debugger.js',
     'lib/client/ddp_update.js',
     'lib/client/data_handler.js',
     'lib/client/auth.js'
