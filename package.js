@@ -30,6 +30,11 @@ Package.onTest(function(api) {
     'tests/client/fast_render.js',
     'tests/client/ddp_update.js'
   ], 'client');
+
+  api.addFiles([
+    'tests/server/fast_render.js',
+    'tests/server/context.js',
+  ], 'server');
 });
 
 function configure (api) {
