@@ -25,6 +25,10 @@ Package.onTest(function(api) {
   api.addFiles([
     'tests/utils.js'
   ], ['client', 'server']);
+
+  api.addFiles([
+    'tests/client/fast_render.js'
+  ], 'client');
 });
 
 function configure (api) {
