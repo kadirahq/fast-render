@@ -51,6 +51,34 @@ Tinytest.addAsync('FastRender - init - ObjectId support', function(test, done) {
   });
 });
 
+Tinytest.add('FastRender - init - merge multiple collection data', function(test) {
+  var collName = Random.id();
+  var payload = {
+    subscriptions: {posts: true},
+    data: {
+
+    }
+  };
+
+  payload.data[collName] = [
+    [{_id: "one", name: "arunoda", age: 20}],
+    [{_id: "one", name: "arunoda", age: 30, city: "colombo"}],
+    [{_id: "one", plan: "pro"}]
+  ];
+  
+  payload = EncodeEJSON(payload);
+  FastRender.init(payload);
+
+  var coll = new Mongo.Collection(collName);
+  test.equal(coll.findOne('one'), {
+    _id: "one",
+    name: "arunoda", 
+    age: 30, 
+    city: "colombo",
+    plan: "pro"
+  });
+});
+
 WithNewInjectDdpMessage = function(newCallback, runCode) {
   var originalInjectDDP = FastRender.injectDdpMessage;
   FastRender.injectDdpMessage = newCallback;
