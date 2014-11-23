@@ -1,4 +1,4 @@
-Tinytest.add('FastRender - init ', function(test) {
+Tinytest.add('FastRender - init - coll data ', function(test) {
   var expectedMessages = [
     {msg: 'added', collection: "posts", id: "one", fields: {name: "arunoda"}},
     {msg: 'added', collection: "posts", id: "two", fields: {name: "meteorhacks"}},
@@ -20,14 +20,41 @@ Tinytest.add('FastRender - init ', function(test) {
 
   var newMessages = [];
 
-  var originalInjectDDP = FastRender.injectDdpMessage;
-  FastRender.injectDdpMessage = function(conn, ddpMessage) {
+  WithNewInjectDdpMessage(function(conn, ddpMessage) {
     newMessages.push(ddpMessage);
-  };
-  payload = EncodeEJSON(payload);
-  FastRender.init(payload);
-  FastRender.injectDdpMessage = originalInjectDDP;
+  }, function() {
+    payload = EncodeEJSON(payload);
+    FastRender.init(payload);
 
-  test.equal(newMessages, expectedMessages);
-  test.equal(FastRender.subscriptions, payload.subscriptions);
+    test.equal(newMessages, expectedMessages);
+    test.equal(FastRender.subscriptions, payload.subscriptions);
+  });
 });
+
+Tinytest.addAsync('FastRender - init - ObjectId support', function(test, done) {
+  var id = new LocalCollection._ObjectID();
+  console.log(id);
+  var payload = {
+    subscriptions: {posts: true},
+    data: {
+      posts: [[
+        {_id: id, name: "arunoda"},
+      ]]
+    }
+  };
+
+  WithNewInjectDdpMessage(function(conn, ddpMessage) {
+    test.equal(ddpMessage.id, id._str);
+    done();
+  }, function() {
+    payload = EncodeEJSON(payload);
+    FastRender.init(payload);
+  });
+});
+
+WithNewInjectDdpMessage = function(newCallback, runCode) {
+  var originalInjectDDP = FastRender.injectDdpMessage;
+  FastRender.injectDdpMessage = newCallback;
+  if(runCode) runCode();
+  FastRender.injectDdpMessage = originalInjectDDP;
+};
