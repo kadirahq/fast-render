@@ -79,6 +79,28 @@ Tinytest.add('FastRender - init - merge multiple collection data', function(test
   });
 });
 
+Tinytest.add('FastRender - init - ejon data', function(test) {
+  var collName = Random.id();
+  var payload = {
+    subscriptions: {posts: true},
+    data: {
+
+    }
+  };
+
+  var date = new Date('2014 Oct 20');
+  payload.data[collName] = [
+    [{_id: "one", name: "arunoda", date: date}],
+  ];
+  
+  payload = EncodeEJSON(payload);
+  FastRender.init(payload);
+
+  var coll = new Mongo.Collection(collName);
+  var doc = coll.findOne("one");
+  test.equal(doc.date.getTime(), date.getTime());
+});
+
 WithNewInjectDdpMessage = function(newCallback, runCode) {
   var originalInjectDDP = FastRender.injectDdpMessage;
   FastRender.injectDdpMessage = newCallback;

@@ -34,6 +34,7 @@ Package.onTest(function(api) {
   api.addFiles([
     'tests/server/fast_render.js',
     'tests/server/context.js',
+    'tests/server/iron_router_support.js',
   ], 'server');
 });
 
