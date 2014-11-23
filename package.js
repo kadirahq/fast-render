@@ -27,7 +27,8 @@ Package.onTest(function(api) {
   ], ['client', 'server']);
 
   api.addFiles([
-    'tests/client/fast_render.js'
+    'tests/client/fast_render.js',
+    'tests/client/ddp_update.js'
   ], 'client');
 });
 

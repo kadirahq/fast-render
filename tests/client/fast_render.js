@@ -33,7 +33,6 @@ Tinytest.add('FastRender - init - coll data ', function(test) {
 
 Tinytest.addAsync('FastRender - init - ObjectId support', function(test, done) {
   var id = new LocalCollection._ObjectID();
-  console.log(id);
   var payload = {
     subscriptions: {posts: true},
     data: {
