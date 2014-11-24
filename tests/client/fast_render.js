@@ -1,8 +1,8 @@
 Tinytest.add('FastRender - init - coll data ', function(test) {
   var expectedMessages = [
-    {msg: 'added', collection: "posts", id: "one", fields: {name: "arunoda"}},
-    {msg: 'added', collection: "posts", id: "two", fields: {name: "meteorhacks"}},
-    {msg: 'added', collection: "comments", id: "one", fields: {text: "great"}}
+    {msg: 'added', collection: "posts", id: "one", fields: {name: "arunoda"}, frGen: true},
+    {msg: 'added', collection: "posts", id: "two", fields: {name: "meteorhacks"}, frGen: true},
+    {msg: 'added', collection: "comments", id: "one", fields: {text: "great"}, frGen: true}
   ];
 
   var payload = {
