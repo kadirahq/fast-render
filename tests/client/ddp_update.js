@@ -21,6 +21,27 @@ Tinytest.add('DDPUpdate - convert added to changed', function(test) {
   test.equal(coll.findOne('one'), {_id: 'one', name: 'kuma', age: 20});
 });
 
+Tinytest.add('DDPUpdate - create collection later on', function(test) {
+  var collName = Random.id();
+
+  Meteor.connection._livedata_data({
+    msg: 'added',
+    collection: collName,
+    id: 'one',
+    fields: {name: "arunoda"}
+  });
+
+  Meteor.connection._livedata_data({
+    msg: 'added',
+    collection: collName,
+    id: 'two',
+    fields: {name: "kamal"}
+  });
+
+  var coll = new Mongo.Collection(collName);
+  test.equal(coll.find().fetch().length, 2);
+});
+
 Tinytest.add('DDPUpdate - delete subscriptions', function(test) {
   FastRender._revertedBackToOriginal = false;
   FastRender._subscriptionIdMap = {subId: "coola", subId2: "coola"};
