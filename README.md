@@ -33,7 +33,7 @@ It has no loading time. Just after the page get loaded, leaderboard is there. In
 Install fast render into your app.
 
 ~~~shell
-meteor add meteorhacks:fast-render@2.0.0-rc7
+meteor add meteorhacks:fast-render@2.0.0-rc8
 ~~~
 
 Then make sure you've moved your Iron Router `router.js` file (or relavant files) to a place which can be access by both server and client. (i.e. `lib` folder).
