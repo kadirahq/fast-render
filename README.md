@@ -2,6 +2,17 @@
 
 Fast Render can improve the initial load time of your app and gives 2-10 times faster page loads. It gives identical result as Server Side Rendering(SSR), but still sending data over the wire without breaking one of the Meteor’s core principles.
 
+**Table of Contents**
+  
+  - [Demo](#demo)
+  - [Usage](#usage)
+  - [Using with Iron Router](#using-with-iron-router)
+  - [Using without Iron Router](#using-without-iron-router)
+  - [Security Measures](#security-measures)
+  - [Debugging](#debugging)
+
+## Demo
+
 Let's look at a demo. It is the leaderboard of the [BulletProof Meteor](https://bulletproofmeteor.com). It's written with Meteor and using Iron Router:
 
 ![a Meteor app Without Fast Render](https://cldup.com/rqjCCH7ftd.png)
