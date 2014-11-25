@@ -172,7 +172,7 @@ So, it is wise to avoid side effects from following places:
 * fastRender routes 
 * IronRouter waitOn and subscriptions methods
 
-### CORS headers
+#### CORS headers
 
 If one of your packages or your app adds [CORS](http://en.wikipedia.org/wiki/Cross-origin_resource_sharing) headers via connect handlers, there is a potential security issue.
 
@@ -180,7 +180,7 @@ So, Fast Render detects CORS headers with conflicting routes and turned off fast
 
 It is okay to add CORS headers to custom server side routes, but if they conflict with the client side routes(which handled by Fast Render), then there is a security issue. This issue allows malicious XHR requests from other domains to access loggedIn user's subscription data.
 
-### Do not Fast Render with shared domains
+#### With shared domains
 
 If your app is available under a shared domain like `*.meteor.com` or `*.herokuapp.com`, then you are exposed to a serious [security issue](https://groups.google.com/forum/#!topic/meteor-talk/Zhy1c6MdOH8). In those situations, don't use fast render.
 
@@ -190,7 +190,7 @@ If you are hosting your app under `*.meteor.com` or heroku but using a separate 
 
 Sometimes, you need to test whether fast render is working or not. You can simply do with the built in debugger. This debugger works on the client side of your app and it's safe to run it on a deployed app as well. It exposes few functionalities:
 
-### Block DDP
+#### Block DDP
 
 You can block the DDP connection and check whether fast rendering worked or not. Once blocked, none of the DDP messages will be accepted. To block, apply following command in the browser console:
 
@@ -204,7 +204,7 @@ You can unblock it back with:
 FastRender.debugger.unblockDDP()
 ~~~
 
-### Get Payload
+#### Get Payload
 
 With following command you can inspect the data comes with fast render:
 
@@ -236,7 +236,7 @@ It will have a format like this:
 
 > You can apply `FastRender.debugger.getPayloadJSON()` to get the logs as a JSON string.
 
-### Disable Fast Render
+#### Disable Fast Render
 
 Likewise blocking DDP, you can disable fast render and see how things happening. To disable, apply following command:
 
@@ -246,7 +246,7 @@ FastRender.debugger.disableFR()
 
 Apply `FastRender.debugger.enableFR()` to enable it back.
 
-### Logs
+#### Logs
 
 Fast Render has a robust logging functionality. You can turn it on by invoking following command:
 
