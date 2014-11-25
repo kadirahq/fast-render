@@ -15,7 +15,7 @@ Fast Render can improve the initial load time of your app and gives 2-10 times f
 
 Let's look at a demo. It is the leaderboard of the [BulletProof Meteor](https://bulletproofmeteor.com). It's written with Meteor and using Iron Router:
 
-![a Meteor app Without Fast Render](https://cldup.com/rqjCCH7ftd.png)
+![a Meteor app Without Fast Render](https://cldup.com/v4PmJqPtlY.png)
 
 You can see the loading screen before rendering the acutual leaderboard.
 
