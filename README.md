@@ -1,34 +1,34 @@
 # Fast Render
 
-Fast Render can improve the initial load time of your app, giving you 2-10 times faster initial page loads. It provides the same effect as Server Side Rendering (SSR), but still sends data over the wire without breaking one of Meteor’s core principles.
+Fast Render can improve the initial load time of your app, giving you 2-10 times faster initial page loads. It provides the same effect as Server Side Rendering (SSR), but still sends data over the wire to avoid breaking one of Meteor’s core principles.
 
 **Table of Contents**
   
   - [Demo](#demo)
   - [Usage](#usage)
-  - [Using Fast Render with Iron Router](#using-fast-render-with-iron-router)
-  - [Using Fast Render without Iron Router](#using-fast-render-without-iron-router)
+  - [Using Fast Render With Iron Router](#using-fast-render-with-iron-router)
+  - [Using Fast Render Without Iron Router](#using-fast-render-without-iron-router)
   - [Security](#security)
   - [Debugging](#debugging)
 
 ## Demo
 
-Let's look at a demo. Here is the leaderboard from [BulletProof Meteor](https://bulletproofmeteor.com). It's written using Meteor and Iron Router:
+Let's look at a demo. Here is the leaderboard example from [BulletProof Meteor](https://bulletproofmeteor.com). It's written using Meteor and Iron Router:
 
 ![a Meteor app Without Fast Render](https://cldup.com/v4PmJqPtlY.png)
 
-You can see the loading screen before rendering the acutual leaderboard.
+Here you see the loading screen while we wait on data to render the acutual leaderboard.
 
 ---
 
-Now let's see what the leaderboard looks like when we use Fast Render: [click here](https://bulletproofmeteor.com/leaderboard)
+Now let's see how the leaderboard loads when using use Fast Render: [click here](https://bulletproofmeteor.com/leaderboard).
 
-There is no loading time. Right after the page is loaded, the leaderboard is there. At this point, we've only added Fast Render to the app and used a single line of configuration.
+You never see the loading screen becuase we don't have to wait on data. Right after the page is loaded, the leaderboard is there. To do this, all we've done is add Fast Render to the app and insert a single line of configuration.
 
 ## Usage
 
 > **Attention**
-> If you are new to Fast Render, I highly recommend you follow this [BulletProof Meteor lesson](https://bulletproofmeteor.com/basics/no-more-loading). It explains how to use Fast Render and why it's needed.
+> If you are new to Fast Render, I highly recommend you follow [this BulletProof Meteor lesson](https://bulletproofmeteor.com/basics/no-more-loading). It explains how to use Fast Render and why you might want to.
 
 Add Fast Render to your Meteor app:
 
@@ -40,15 +40,15 @@ meteor add meteorhacks:fast-render@2.0.0-rc8
 
 Fast Render is compatible with both versions 0.9 and 1.0 of Iron Router. However, you'll need to follow a few rules.
 
-#### 1. Place your routes in a place which can be seen by both server and client
+#### 1. Place your routes in a place which can be seen by both server and client.
 
-Fast Render needs to read some of your route's function like `waitOn()` on the server. Therefore you make write your app's routes (`router.js` file or relavant files) in a place which can seen by both server and the client
+Fast Render needs to read some of your routes' functions like `waitOn()` on the server. Put your app's routes (`router.js` file or relavant files) in a place which can seen by both the server and the client.
 
 > Meteor's `lib` directory is a best place to keep your routes.
 
-#### 2. Add `fastRender:true` option.
+#### 2. Add the `fastRender: true` option.
 
-You need to tell, which routes needs fast rendering or not. That's done by adding an option to your route with `fastRender:true` as shown below:
+You need to specify which routes you'd like to apply Fast Render to. That's done by adding the `fastRender: true` option to a route as shown below:
 
 ~~~js
 this.route('leaderboard', {
@@ -60,13 +60,13 @@ this.route('leaderboard', {
 });
 ~~~
 
-#### 3. waitOn and subscriptions methods
+#### 3. waitOn and subscription methods
 
-Fast render runs your waitOn and [controller subscription](https://github.com/EventedMind/iron-router/blob/devel/Guide.md#the-subscriptions-option) methods on the server. Make sure you are using `Meteor.subscribe` instead of `this.subscribe`.
+Fast render runs your waitOn and [controller subscription](https://github.com/EventedMind/iron-router/blob/devel/Guide.md#the-subscriptions-option) methods on the server. Make sure you're using `Meteor.subscribe` and not `this.subscribe`.
 
 > SubsManager is compatible with Fast Render, so you can also use [SubsManager](https://github.com/meteorhacks/subs-manager) inside these methods.
 
-Since these methods run on the server, you can't have any client related code inside these functions. For an example, if you are using `Session` related logic inside a waitOn, you need to make sure they are going to execute only on the client. Here's how you can do it:
+Since these methods run on the server, you can't have any client related code inside these functions. For example, if you are using `Session` related logic inside a waitOn, you need to make sure that code will only be executed on the client. Here's how:
 
 ~~~js
 waitOn: function() {
@@ -99,15 +99,13 @@ If you're doing some custom subscription handling, Fast Render won't be able to 
 
 If you want to use Fast Render in these cases, you'll need to map subscriptions manually to routes. It can be done using the following API's:
 
-> All these APIs are available on the server only.
+> The following APIs are available on the server only.
 
 #### FastRender.route(callback)
 
-This declares server side routes using a URL pattern which is compatible with Iron Router. The callback runs in a context very similar to Meteor and you can use any Meteor APIs inside it (it runs on a Fiber).
+This declares server side routes using a URL pattern similar to Iron Router's. The callback runs in a context very similar to Meteor and you can use any Meteor APIs inside it (it runs on a Fiber).  Inside, you can subscribe to publications using `this.subscribe`.
 
-Inside this, you can subscribe to publications using `this.subscribe`.
-
-Eg:-
+Use it like this:
 
 ~~~js
 FastRender.route('/leaderboard/:date', function(params) {
@@ -117,7 +115,9 @@ FastRender.route('/leaderboard/:date', function(params) {
 
 #### FastRender.onAllRoutes(callback)
 
-This is very similar to `FastRender.route`, but lets you register a callback which will run on all routes.
+This is very similar to `FastRender.route`, but lets you register a callback which will run on all routes. 
+
+Use it like this:
 
 ~~~js
 FastRender.onAllRoutes(function(path) {
@@ -137,11 +137,11 @@ Then Fast Render parses and loads that data into Meteor collections. This makes 
 
 ## Security
 
-Fast Render has the ability to get data related to a user by detecting the `loggedIn` property. It does this by sending the same loginToken used by the DDP connection using cookies.
+Fast Render has the ability to get data related to a user by detecting `loggedIn` status. It does this by sending the same loginToken used by the DDP connection using cookies.
 
 This is not inherently bad, but this might potentially cause some security issues. Those issues are described below along with possible countermeasures. Fortunately, Fast Render has features to prevent some of them.
 
-> These issues are raised by [Emily Stark](https://twitter.com/estark37) from the [meteor-core team](https://groups.google.com/forum/#!msg/meteor-talk/1Fg4rNk9JZM/ELX3672QsrEJ).
+> These issues were raised by [Emily Stark](https://twitter.com/estark37) from the [meteor-core team](https://groups.google.com/forum/#!msg/meteor-talk/1Fg4rNk9JZM/ELX3672QsrEJ).
 
 #### Side Effects
 
@@ -161,7 +161,7 @@ If your app adds [CORS](http://en.wikipedia.org/wiki/Cross-origin_resource_shari
 
 Fast Render detects CORS headers with conflicting routes and turns off fast rendering for those routes.
 
-It is okay to add CORS headers to custom server side routes, but if they conflict with the client side routes (which are handled by Fast Render), then there will be a security issue. It would allow malicious XHR requests from other domains to access loggedIn user's subscription data.
+It's okay to add CORS headers to custom server side routes, but if they conflict with the client side routes (which are handled by Fast Render), then there will be a security issue. It would allow malicious XHR requests from other domains to access loggedIn user's subscription data.
 
 #### Shared Domains
 
