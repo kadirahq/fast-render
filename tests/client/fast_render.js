@@ -51,7 +51,7 @@ Tinytest.addAsync('FastRender - init - ObjectId support', function(test, done) {
   });
 });
 
-Tinytest.add('FastRender - init - merge multiple collection data', function(test) {
+Tinytest.add('FastRender - init - merge docs', function(test) {
   var collName = Random.id();
   var payload = {
     subscriptions: {posts: true},
@@ -78,6 +78,35 @@ Tinytest.add('FastRender - init - merge multiple collection data', function(test
     plan: "pro"
   });
 });
+
+Tinytest.add('FastRender - init - merge docs deep', function(test) {
+  var collName = Random.id();
+  var payload = {
+    subscriptions: {posts: true},
+    data: {
+
+    }
+  };
+
+  payload.data[collName] = [
+    [{_id: "one", name: "arunoda", profile: {name: "arunoda"}}],
+    [{_id: "one", name: "arunoda", profile: {email: "arunoda@arunoda.com"}}],
+  ];
+  
+  payload = EncodeEJSON(payload);
+  FastRender.init(payload);
+
+  var coll = new Mongo.Collection(collName);
+  test.equal(coll.findOne('one'), {
+    _id: "one",
+    name: "arunoda", 
+    profile: {
+      name: "arunoda",
+      email: "arunoda@arunoda.com"
+    }
+  });
+});
+
 
 Tinytest.add('FastRender - init - ejon data', function(test) {
   var collName = Random.id();
