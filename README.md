@@ -7,7 +7,7 @@ Fast Render can improve the initial load time of your app, giving you 2-10 times
   - [Demo](#demo)
   - [Usage](#usage)
   - [Using Fast Render With Iron Router](#using-fast-render-with-iron-router)
-  - [Using Fast Render Without Iron Router](#using-fast-render-without-iron-router)
+  - [Using Fast Render's route APIs](#using-fast-renders-route-apis)
   - [Security](#security)
   - [Debugging](#debugging)
 
@@ -36,6 +36,20 @@ Add Fast Render to your Meteor app:
 meteor add meteorhacks:fast-render@2.0.0-rc8
 ~~~
 
+After that, make sure you've moved your Iron Router routes (`router.js` file or relavant files) to a place which can be access by both server and client. (i.e. the `lib` folder).
+
+Then add the `fastRender: true` option to your route:
+
+~~~js
+this.route('leaderboard', {
+  path: '/leaderboard/:date?',
+  waitOn: function(){
+    return Meteor.subscribe('leaderboard'); 
+  },
+  fastRender: true
+});
+~~~
+
 ## Using Fast Render With Iron Router
 
 Fast Render is compatible with both versions 0.9 and 1.0 of Iron Router. However, you'll need to follow a few rules.
@@ -48,7 +62,7 @@ Fast Render needs to read some of your routes' functions like `waitOn()` on the 
 
 #### 2. Add the `fastRender: true` option.
 
-You need to specify which routes you'd like to apply Fast Render to. That's done by adding the `fastRender: true` option to a route as shown below:
+The next step is to specify which routes you'd like to apply Fast Render to. That's done by adding the `fastRender: true` option to a route as shown below:
 
 ~~~js
 this.route('leaderboard', {
@@ -60,9 +74,9 @@ this.route('leaderboard', {
 });
 ~~~
 
-#### 3. waitOn and subscription methods
+#### 3. `waitOn` and `subscriptions` methods
 
-Fast render runs your waitOn and [controller subscription](https://github.com/EventedMind/iron-router/blob/devel/Guide.md#the-subscriptions-option) methods on the server. Make sure you're using `Meteor.subscribe` and not `this.subscribe`.
+Fast Render runs your waitOn and [subscriptions](https://github.com/EventedMind/iron-router/blob/devel/Guide.md#the-subscriptions-option) methods on the server. Make sure you're using `Meteor.subscribe` and not `this.subscribe`.
 
 > SubsManager is compatible with Fast Render, so you can also use [SubsManager](https://github.com/meteorhacks/subs-manager) inside these methods.
 
@@ -93,11 +107,11 @@ Router.configure({
 });
 ~~~
 
-## Using Fast Render Without Iron Router
+## Using Fast Render's route APIs
 
 If you're doing some custom subscription handling, Fast Render won't be able to identify those subscriptions. This is also true when you are not using Iron Router.
 
-If you want to use Fast Render in these cases, you'll need to map subscriptions manually to routes. It can be done using the following API's:
+If you want to use Fast Render in these cases, you'll need to map subscriptions manually to routes. It can be done using the following APIs:
 
 > The following APIs are available on the server only.
 
@@ -147,7 +161,7 @@ This is not inherently bad, but this might potentially cause some security issue
 
 It is possible to send custom HTTP requests to routes handled by Fast Render either using an XHR request or a direct HTTP request.
 
-So if you are doing some DB write operations or saving something to the filesystem, the code sent will be executed. this could be bad if the HTTP request is an XHR request called by a maligned user. They wouldn't be able read anything, but they could cause side effects.
+So if you are doing some DB write operations or saving something to the filesystem, the code sent will be executed. this could be bad if the HTTP request is an XHR request called by a malicious user. They wouldn't be able read anything, but they could cause side effects.
 
 It is wise to avoid side effects from following places:
 
@@ -221,9 +235,17 @@ It will be in this format:
 
 #### Disable Fast Render
 
-Using `FastRender.debugger.disableFR()` to disable Fast Render.
+You can also use a command to disable Fast Render:
 
-Use `FastRender.debugger.enableFR()` to re-enable it.
+~~~
+FastRender.debugger.disableFR()
+~~~
+
+Re-enable it with:
+
+~~~
+FastRender.debugger.enableFR()
+~~~
 
 #### Logs
 
@@ -234,3 +256,33 @@ You can turn it on using `FastRender.debugger.showLogs()`.
 Hide them again using `FastRender.debugger.hideLogs()`.
 
 You can get all of the log messages by using `FastRender.debugger.getLogs()` and `FastRender.debugger.getLogsJSON()`.
+
+
+***
+
+
+## Fast Render 2.x vs 1.x
+
+There is no much difference for you, but 2.x is deeply integrated to Meteor and it will have almost zero DDP related issues.
+
+#### Iron Router
+
+Fast Render 1.x used to work with almost all versions of Iron Router. But Fast Render 2.x only works with Iron Router version 0.9 and 1.x only.
+
+Earlier, Fast Render comes with it's own Iron Router controller called `FastRender.RouteController`. You could use that to add Fast Render support to that RouteController.
+
+Now, you've to set `fastRender:true` option in the route level and there is no `FastRender.RouteController`.
+
+#### Unused APIs
+
+Fast Render 1.x comes with a lot of additional APIs. Now [these](#some-link) are the only API's comes with Fast Render.
+
+* FastRender.route(<route-def>, <callback>)
+* FastRender.onAllRouters(<callback>)
+
+#### Debugger
+
+Fast Render 2.x comes with a it's own debugger where you can use to check whether Fast Render is working or not. It has some handly tools.
+
+
+
