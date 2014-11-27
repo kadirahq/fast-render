@@ -29,6 +29,8 @@ Now let's see how the leaderboard loads when using use Fast Render: [click here]
 
 You never see the loading screen becuase we don't have to wait on data. Right after the page is loaded, the leaderboard is there. To do this, all we've done is add Fast Render to the app and insert a single line of configuration.
 
+Check this demo [video](https://www.youtube.com/watch?v=mGcE6UVOqPk) if you need to see more what Fast Render can do.
+
 ## Usage
 
 > **Attention**
