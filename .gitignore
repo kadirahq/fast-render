@@ -2,3 +2,4 @@
 .build*
 .npm
 test/packages/fast-render
+versions.json
