@@ -90,6 +90,8 @@ this.route('leaderboard', {
 });
 ~~~
 
+> You can also add `fastRender:true` option when extending `RouteController`. Then you don't need add `fastRender:true` option for individual routes.
+
 #### 3. `waitOn` and `subscriptions` methods
 
 Fast Render runs your waitOn and [subscriptions](https://github.com/EventedMind/iron-router/blob/devel/Guide.md#the-subscriptions-option) methods on the server. Make sure you're using `Meteor.subscribe` and not `this.subscribe`.
@@ -122,6 +124,8 @@ Router.configure({
   }
 });
 ~~~
+
+> This is [how](https://github.com/TelescopeJS/Telescope/pull/565/files?diff=split) Fast Render support has been added to Telescope. [See](https://github.com/TelescopeJS/Telescope/pull/565/files?diff=split) how easy it was.
 
 ## Using Fast Render's route APIs
 
