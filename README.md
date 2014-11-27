@@ -1,81 +1,44 @@
 # Fast Render
 
-Fast Render can improve the initial load time of your app and gives 2-10 times faster page loads. It gives identical result as Server Side Rendering(SSR), but still sending data over the wire without breaking one of the Meteor’s core principles.
+Fast Render can improve the initial load time of your app, giving you 2-10 times faster initial page loads. It provides the same effect as Server Side Rendering (SSR), but still sends data over the wire to avoid breaking one of Meteor’s core principles.
 
 **Table of Contents**
   
   - [Demo](#demo)
   - [Usage](#usage)
-  - [Using with Iron Router](#using-with-iron-router)
-  - [Using without Iron Router](#using-without-iron-router)
-  - [Security Measures](#security-measures)
+  - [Using Fast Render With Iron Router](#using-fast-render-with-iron-router)
+  - [Using Fast Render's route APIs](#using-fast-renders-route-apis)
+  - [Security](#security)
   - [Debugging](#debugging)
 
 ## Demo
 
-Let's look at a demo. It is the leaderboard of the [BulletProof Meteor](https://bulletproofmeteor.com). It's written with Meteor and using Iron Router:
+Let's look at a demo. Here is the leaderboard example from [BulletProof Meteor](https://bulletproofmeteor.com). It's written using Meteor and Iron Router:
 
 ![a Meteor app Without Fast Render](https://cldup.com/v4PmJqPtlY.png)
 
-You can see the loading screen before rendering the acutual leaderboard.
+Here you see the loading screen while we wait on data to render the acutual leaderboard.
 
 ---
 
-Now let's look at the fast render enabled leaderboard: [click here](https://bulletproofmeteor.com/leaderboard)
+Now let's see how the leaderboard loads when using use Fast Render: [click here](https://bulletproofmeteor.com/leaderboard).
 
-It has no loading time. Just after the page get loaded, leaderboard is there. In this case we've only added fast render to the app and add a single line of configuration.
+You never see the loading screen becuase we don't have to wait on data. Right after the page is loaded, the leaderboard is there. To do this, all we've done is add Fast Render to the app and insert a single line of configuration.
 
 ## Usage
 
 > **Attention**
-> If you are new to fast render, I highly recommend to follow this [BulletProof Meteor lesson](https://bulletproofmeteor.com/basics/no-more-loading) which shows how to use fast render and show why it's needed.
+> If you are new to Fast Render, I highly recommend you follow [this BulletProof Meteor lesson](https://bulletproofmeteor.com/basics/no-more-loading). It explains how to use Fast Render and why you might want to.
 
-Install fast render into your app.
+Add Fast Render to your Meteor app:
 
 ~~~shell
 meteor add meteorhacks:fast-render@2.0.0-rc8
 ~~~
 
-Then make sure you've moved your Iron Router `router.js` file (or relavant files) to a place which can be access by both server and client. (i.e. `lib` folder).
+After that, make sure you've moved your Iron Router routes (`router.js` file or relavant files) to a place which can be access by both server and client. (i.e. the `lib` folder).
 
-Then add `fastRender: true` option to the route like below:
-
-~~~js
-this.route('leaderboard', {
-  path: '/leaderboard',
-  waitOn: function(){
-    return Meteor.subscribe('leaderboard'); 
-  },
-  fastRender: true
-});
-
-~~~
-
-That's only you've to do.
-
-### How Fast Render Works
-
-Fast render runs the above `waitOn` function on the server and get the subscription data relavant to `leaderboard` publication. Then it will send those data along with the initial HTML of the meteor app as shown below:
-
-![Meteor Subscription Data with Initial HTML](https://cldup.com/RFgMhjv7qR.png)
-
-Then fast render parse and loads that data into Meteor collections. So, your Meteor app code (Iron Router) thinks page has been loaded and it can render the page right away. 
-
-If you want to learn more about [how Fast Render works](https://meteorhacks.com/fast-render-internals-and-how-it-works.html), refer this [article](https://meteorhacks.com/fast-render-internals-and-how-it-works.html).
-
-## Using with Iron Router
-
-You can use both Iron Router 0.9 and 1.0 with fast render. However, you need to follow some few rules.
-
-#### 1. Place your routes in a place which can be seen by both server and client
-
-Fast Render needs to read some of your route's function like `waitOn()` on the server. Therefore you make write your app's routes in a place which can seen by both server and the client.
-
-> Meteor's `lib` directory is a best place to keep your routes.
-
-#### 2. Add `fastRender:true` option.
-
-You need to tell, which routes needs fast rendering or not. That's done by adding an option to your route with `fastRender:true` as shown below:
+Then add the `fastRender: true` option to your route:
 
 ~~~js
 this.route('leaderboard', {
@@ -87,13 +50,37 @@ this.route('leaderboard', {
 });
 ~~~
 
-#### 3. waitOn and subscriptions methods
+## Using Fast Render With Iron Router
 
-Fast render runs your waitOn and [subscriptions](https://github.com/EventedMind/iron-router/blob/devel/Guide.md#the-subscriptions-option) method on the controller in side the server. So, make sure you are using `Meteor.subscribe` instead of `this.subscribe`.
+Fast Render is compatible with both versions 0.9 and 1.0 of Iron Router. However, you'll need to follow a few rules.
 
-> But, you can use [SubsManager](https://github.com/meteorhacks/subs-manager) inside these methods. SubsManager works with fast render.
+#### 1. Place your routes in a place which can be seen by both server and client.
 
-Since these methods runs on the server, you can't have any client related code inside these functions. For an example, if you are using `Session` related logic inside a waitOn you need to make sure they are going to execute only in the client. This is how you can do it:
+Fast Render needs to read some of your routes' functions like `waitOn()` on the server. Put your app's routes (`router.js` file or relavant files) in a place which can seen by both the server and the client.
+
+> Meteor's `lib` directory is a best place to keep your routes.
+
+#### 2. Add the `fastRender: true` option.
+
+The next step is to specify which routes you'd like to apply Fast Render to. That's done by adding the `fastRender: true` option to a route as shown below:
+
+~~~js
+this.route('leaderboard', {
+  path: '/leaderboard/:date?',
+  waitOn: function(){
+    return Meteor.subscribe('leaderboard'); 
+  },
+  fastRender: true
+});
+~~~
+
+#### 3. `waitOn` and `subscriptions` methods
+
+Fast Render runs your waitOn and [subscriptions](https://github.com/EventedMind/iron-router/blob/devel/Guide.md#the-subscriptions-option) methods on the server. Make sure you're using `Meteor.subscribe` and not `this.subscribe`.
+
+> SubsManager is compatible with Fast Render, so you can also use [SubsManager](https://github.com/meteorhacks/subs-manager) inside these methods.
+
+Since these methods run on the server, you can't have any client related code inside these functions. For example, if you are using `Session` related logic inside a waitOn, you need to make sure that code will only be executed on the client. Here's how:
 
 ~~~js
 waitOn: function() {
@@ -108,7 +95,7 @@ waitOn: function() {
 
 #### 4. Global Configurations
 
-If you declare waitOn methods in the global level as shown below, fast render picks data for subscriptions defined inside those waitOn methods by default.
+If you declare waitOn methods at the global level as shown below, then by default Fast Render will pick data for subscriptions defined inside those waitOn methods.
 
 ~~~js
 Router.configure({
@@ -120,21 +107,19 @@ Router.configure({
 });
 ~~~
 
-## Using without Iron Router
+## Using Fast Render's route APIs
 
-Sometimes, you might be doing some custom subscription handling and then fast render can't identify those subscriptions. This is also true when you are not using Iron Router.
+If you're doing some custom subscription handling, Fast Render won't be able to identify those subscriptions. This is also true when you are not using Iron Router.
 
-In such cases, you need to map subscriptions manually to routes. It can be done with following apis:
+If you want to use Fast Render in these cases, you'll need to map subscriptions manually to routes. It can be done using the following APIs:
 
-> All these APIs are available in the server only.
+> The following APIs are available on the server only.
 
 #### FastRender.route(callback)
 
-You can declare server side routes using an url pattern which compatible with Iron Router. The callback runs in a context very similar to Meteor and you can use any Meteor APIs inside it. (It runs on a Fiber)
+This declares server side routes using a URL pattern similar to Iron Router's. The callback runs in a context very similar to Meteor and you can use any Meteor APIs inside it (it runs on a Fiber).  Inside, you can subscribe to publications using `this.subscribe`.
 
-Then inside that, you can subscribe to publications with `this.subscribe`.
-
-Eg:-
+Use it like this:
 
 ~~~js
 FastRender.route('/leaderboard/:date', function(params) {
@@ -144,7 +129,9 @@ FastRender.route('/leaderboard/:date', function(params) {
 
 #### FastRender.onAllRoutes(callback)
 
-You can register a callback which will runs on all routes. It's very similar to `FastRender.route` but runs on all routes.
+This is very similar to `FastRender.route`, but lets you register a callback which will run on all routes. 
+
+Use it like this:
 
 ~~~js
 FastRender.onAllRoutes(function(path) {
@@ -152,53 +139,63 @@ FastRender.onAllRoutes(function(path) {
 })
 ~~~
 
-## Security Measures
+### How Fast Render Works
 
-Fast render has the ability to detect the loggedIn user and get data related to him/her. It does this by sending the same loginToken used by the DDP connection over cookies.
+Fast render runs the `waitOn` function (or one of the Fast Render API calls) on the server and gets the subscription data relavant to the page you are loading. Then it sends that data along with the initial HTML of the Meteor app as shown below:
 
-This is not something bad, but this might cause some security issues. Those issues are described below with the possible counter measures. Fortunately, Fast Render has built-in measures to prevent some of them.
+![Meteor Subscription Data with Initial HTML](https://cldup.com/RFgMhjv7qR.png)
 
-> These issues are raised by [Emily Stark](https://twitter.com/estark37) from the [meteor-core team](https://groups.google.com/forum/#!msg/meteor-talk/1Fg4rNk9JZM/ELX3672QsrEJ).
+Then Fast Render parses and loads that data into Meteor collections. This makes your Meteor app code (Iron Router) think the data connection has been made, and it renders the page right away.
+
+> If you want to learn more about how Fast Render works, refer to [this article](https://meteorhacks.com/fast-render-internals-and-how-it-works.html).
+
+## Security
+
+Fast Render has the ability to get data related to a user by detecting `loggedIn` status. It does this by sending the same loginToken used by the DDP connection using cookies.
+
+This is not inherently bad, but this might potentially cause some security issues. Those issues are described below along with possible countermeasures. Fortunately, Fast Render has features to prevent some of them.
+
+> These issues were raised by [Emily Stark](https://twitter.com/estark37) from the [meteor-core team](https://groups.google.com/forum/#!msg/meteor-talk/1Fg4rNk9JZM/ELX3672QsrEJ).
 
 #### Side Effects
 
-It is possible to send custom HTTP requests to one of the routes handled by fast render either as a XHR request or a direct HTTP request.
+It is possible to send custom HTTP requests to routes handled by Fast Render either using an XHR request or a direct HTTP request.
 
-In this case, if you are doing some DB write operations or saving something to the filesystem, they'll be  get executed. This gets worst, if the HTTP request is a XHR request called by an evil user. He can’t read anything, but he can cause side effects.
+So if you are doing some DB write operations or saving something to the filesystem, the code sent will be executed. this could be bad if the HTTP request is an XHR request called by a malicious user. They wouldn't be able read anything, but they could cause side effects.
 
-So, it is wise to avoid side effects from following places:
+It is wise to avoid side effects from following places:
 
 * publications
 * fastRender routes 
 * IronRouter waitOn and subscriptions methods
 
-#### CORS headers
+#### CORS Headers
 
-If one of your packages or your app adds [CORS](http://en.wikipedia.org/wiki/Cross-origin_resource_sharing) headers via connect handlers, there is a potential security issue.
+If your app adds [CORS](http://en.wikipedia.org/wiki/Cross-origin_resource_sharing) headers via connect handlers, there is a potential security issue.
 
-So, Fast Render detects CORS headers with conflicting routes and turned off fast rendering for that routes.
+Fast Render detects CORS headers with conflicting routes and turns off fast rendering for those routes.
 
-It is okay to add CORS headers to custom server side routes, but if they conflict with the client side routes(which handled by Fast Render), then there is a security issue. This issue allows malicious XHR requests from other domains to access loggedIn user's subscription data.
+It's okay to add CORS headers to custom server side routes, but if they conflict with the client side routes (which are handled by Fast Render), then there will be a security issue. It would allow malicious XHR requests from other domains to access loggedIn user's subscription data.
 
-#### With shared domains
+#### Shared Domains
 
-If your app is available under a shared domain like `*.meteor.com` or `*.herokuapp.com`, then you are exposed to a serious [security issue](https://groups.google.com/forum/#!topic/meteor-talk/Zhy1c6MdOH8). In those situations, don't use fast render.
+If your app is available under a shared domain like `*.meteor.com` or `*.herokuapp.com`, then you are exposed to a serious [security issue](https://groups.google.com/forum/#!topic/meteor-talk/Zhy1c6MdOH8). In these situations, don't use Fast Render.
 
-If you are hosting your app under `*.meteor.com` or heroku but using a separate domain, then you are not vulnerable for this issue.
+If you host your app under `*.meteor.com` etc. but use a separate domain, then your app will not be vulnerable in this way.
 
 ## Debugging
 
-Sometimes, you need to test whether fast render is working or not. You can simply do with the built in debugger. This debugger works on the client side of your app and it's safe to run it on a deployed app as well. It exposes few functionalities:
+Sometimes, you need to test whether Fast Render is working or not. You can do this using the built-in debugger. The debugger works on the client and is safe to run it on a deployed app. It has a few useful features:
 
 #### Block DDP
 
-You can block the DDP connection and check whether fast rendering worked or not. Once blocked, none of the DDP messages will be accepted. To block, apply following command in the browser console:
+You can block the DDP connection and check whether the page was fast rendered or not. Once blocked, no DDP messages will be accepted. To block, apply following command in the browser console:
 
 ~~~
 FastRender.debugger.blockDDP()
 ~~~
 
-You can unblock it back with:
+You can unblock it with:
 
 ~~~
 FastRender.debugger.unblockDDP()
@@ -206,13 +203,13 @@ FastRender.debugger.unblockDDP()
 
 #### Get Payload
 
-With following command you can inspect the data comes with fast render:
+With the following command you can inspect the data that comes on a Fast Render page load:
 
 ~~~
 FastRender.debugger.getPayload()
 ~~~
 
-It will have a format like this:
+It will be in this format:
 
 ~~~js
 {
@@ -222,7 +219,7 @@ It will have a format like this:
     leaderBoard: true
   },
 
-  // data grouped by the collection name
+  // data grouped by collection name
   data: {
     courses: [
       [...],
@@ -234,26 +231,58 @@ It will have a format like this:
 }
 ~~~
 
-> You can apply `FastRender.debugger.getPayloadJSON()` to get the logs as a JSON string.
+> You can also apply `FastRender.debugger.getPayloadJSON()` to get the logs as a JSON string.
 
 #### Disable Fast Render
 
-Likewise blocking DDP, you can disable fast render and see how things happening. To disable, apply following command:
+You can also use a command to disable Fast Render:
 
 ~~~
 FastRender.debugger.disableFR()
 ~~~
 
-Apply `FastRender.debugger.enableFR()` to enable it back.
+Re-enable it with:
+
+~~~
+FastRender.debugger.enableFR()
+~~~
 
 #### Logs
 
-Fast Render has a robust logging functionality. You can turn it on by invoking following command:
+Fast Render has robust logging. 
 
-~~~
-FastRender.debugger.showLogs()
-~~~
+You can turn it on using `FastRender.debugger.showLogs()`.
 
-You can hide logs again via `FastRender.debugger.hideLogs()`.
+Hide them again using `FastRender.debugger.hideLogs()`.
 
-You can get all of the log messages with `FastRender.debugger.getLogs()` and `FastRender.debugger.getLogsJSON()`.
+You can get all of the log messages by using `FastRender.debugger.getLogs()` and `FastRender.debugger.getLogsJSON()`.
+
+
+***
+
+
+## Fast Render 2.x vs 1.x
+
+There is no much difference for you, but 2.x is deeply integrated to Meteor and it will have almost zero DDP related issues.
+
+#### Iron Router
+
+Fast Render 1.x used to work with almost all versions of Iron Router. But Fast Render 2.x only works with Iron Router version 0.9 and 1.x only.
+
+Earlier, Fast Render comes with it's own Iron Router controller called `FastRender.RouteController`. You could use that to add Fast Render support to that RouteController.
+
+Now, you've to set `fastRender:true` option in the route level and there is no `FastRender.RouteController`.
+
+#### Unused APIs
+
+Fast Render 1.x comes with a lot of additional APIs. Now [these](#some-link) are the only API's comes with Fast Render.
+
+* FastRender.route(<route-def>, <callback>)
+* FastRender.onAllRouters(<callback>)
+
+#### Debugger
+
+Fast Render 2.x comes with a it's own debugger where you can use to check whether Fast Render is working or not. It has some handly tools.
+
+
+
