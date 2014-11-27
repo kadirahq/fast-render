@@ -1,4 +1,4 @@
-[![](https://api.travis-ci.org/meteorhacks/fast-render.svg)](https://travis-ci.org/meteorhacks/fast-render)
+[![Build Status](https://travis-ci.org/meteorhacks/fast-render.svg?branch=master)](https://travis-ci.org/meteorhacks/fast-render)
 
 # Fast Render
 
