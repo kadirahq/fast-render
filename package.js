@@ -2,8 +2,8 @@ var fs = Npm.require('fs');
 var path = Npm.require('path');
 
 Package.describe({
-  "summary": "Render initial page 2-10 times faster by sending data with HTML",
-  "version": "2.0.0-rc8",
+  "summary": "Render you app even before the DDP connection comes live. - (magic?)",
+  "version": "2.0.0",
   "git": "https://github.com/meteorhacks/fast-render",
   "name": "meteorhacks:fast-render"
 });
@@ -12,7 +12,7 @@ Npm.depends({
   "connect": "2.13.0"
 });
 
-Package.on_use(function(api) {
+Package.onUse(function(api) {
   configure(api);
   api.export('FastRender', ['client', 'server']);
   api.export('__init_fast_render', ['client']);
