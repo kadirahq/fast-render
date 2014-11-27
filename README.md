@@ -6,10 +6,12 @@ Fast Render can improve the initial load time of your app, giving you 2-10 times
   
   - [Demo](#demo)
   - [Usage](#usage)
+  - [How Fast Render Works](#how-fast-render-works)
   - [Using Fast Render With Iron Router](#using-fast-render-with-iron-router)
   - [Using Fast Render's route APIs](#using-fast-renders-route-apis)
   - [Security](#security)
   - [Debugging](#debugging)
+  - [Fast Render 2.x vs 1.x](#fast-render-2x-vs-1x)
 
 ## Demo
 
@@ -49,6 +51,16 @@ this.route('leaderboard', {
   fastRender: true
 });
 ~~~
+
+## How Fast Render Works
+
+Fast render runs the `waitOn` function (or one of the Fast Render API calls) on the server and gets the subscription data relavant to the page you are loading. Then it sends that data along with the initial HTML of the Meteor app as shown below:
+
+![Meteor Subscription Data with Initial HTML](https://cldup.com/RFgMhjv7qR.png)
+
+Then Fast Render parses and loads that data into Meteor collections. This makes your Meteor app code (Iron Router) think the data connection has been made, and it renders the page right away.
+
+> If you want to learn more about how Fast Render works, refer to [this article](https://meteorhacks.com/fast-render-internals-and-how-it-works.html).
 
 ## Using Fast Render With Iron Router
 
@@ -138,16 +150,6 @@ FastRender.onAllRoutes(function(path) {
   this.subscribe('currentUser');
 })
 ~~~
-
-### How Fast Render Works
-
-Fast render runs the `waitOn` function (or one of the Fast Render API calls) on the server and gets the subscription data relavant to the page you are loading. Then it sends that data along with the initial HTML of the Meteor app as shown below:
-
-![Meteor Subscription Data with Initial HTML](https://cldup.com/RFgMhjv7qR.png)
-
-Then Fast Render parses and loads that data into Meteor collections. This makes your Meteor app code (Iron Router) think the data connection has been made, and it renders the page right away.
-
-> If you want to learn more about how Fast Render works, refer to [this article](https://meteorhacks.com/fast-render-internals-and-how-it-works.html).
 
 ## Security
 
@@ -258,9 +260,6 @@ Hide them again using `FastRender.debugger.hideLogs()`.
 You can get all of the log messages by using `FastRender.debugger.getLogs()` and `FastRender.debugger.getLogsJSON()`.
 
 
-***
-
-
 ## Fast Render 2.x vs 1.x
 
 There is no much difference for you, but 2.x is deeply integrated to Meteor and it will have almost zero DDP related issues.
@@ -275,7 +274,7 @@ Now, you've to set `fastRender:true` option in the route level and there is no `
 
 #### Unused APIs
 
-Fast Render 1.x comes with a lot of additional APIs. Now [these](#some-link) are the only API's comes with Fast Render.
+Fast Render 1.x comes with a lot of additional APIs. Now [these](#using-fast-renders-route-apis) are the only API's comes with Fast Render.
 
 * FastRender.route(<route-def>, <callback>)
 * FastRender.onAllRouters(<callback>)
