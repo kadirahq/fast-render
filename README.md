@@ -1,3 +1,5 @@
+[![](https://api.travis-ci.org/meteorhacks/fast-render.svg)](https://travis-ci.org/meteorhacks/fast-render)
+
 # Fast Render
 
 Fast Render can improve the initial load time of your app, giving you 2-10 times faster initial page loads. It provides the same effect as Server Side Rendering (SSR), but still sends data over the wire to avoid breaking one of Meteor’s core principles.
