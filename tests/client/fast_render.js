@@ -88,7 +88,7 @@ Tinytest.add('FastRender - init - ejon data', function(test) {
     }
   };
 
-  var date = new Date('2014 Oct 20');
+  var date = new Date('2014-10-20');
   payload.data[collName] = [
     [{_id: "one", name: "arunoda", date: date}],
   ];
