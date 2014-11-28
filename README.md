@@ -39,7 +39,7 @@ Check this demo [video](https://www.youtube.com/watch?v=mGcE6UVOqPk) if you need
 Add Fast Render to your Meteor app:
 
 ~~~shell
-meteor add meteorhacks:fast-render@2.0.0-rc8
+meteor add meteorhacks:fast-render
 ~~~
 
 After that, make sure you've moved your Iron Router routes (`router.js` file or relavant files) to a place which can be access by both server and client. (i.e. the `lib` folder).
