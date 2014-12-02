@@ -289,7 +289,4 @@ Fast Render 1.x comes with a lot of additional APIs. Now [these](#using-fast-ren
 
 #### Debugger
 
-Fast Render 2.x comes with a it's own debugger where you can use to check whether Fast Render is working or not. It has some handly tools.
-
-
-
+Fast Render 2.x comes with a its own debugger, which you can use to check whether Fast Render is working or not. It also has some handy tools.
