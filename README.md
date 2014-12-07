@@ -191,7 +191,7 @@ It's okay to add CORS headers to custom server side routes, but if they conflict
 
 If your app is available under a shared domain like `*.meteor.com` or `*.herokuapp.com`, there is a potential [security issue](https://groups.google.com/forum/#!topic/meteor-talk/Zhy1c6MdOH8). 
 
-**We've made some [protection](https://groups.google.com/d/msg/meteor-talk/LTO2n5D1bxY/J5EnVpJo0rAJ) to this issue; so you can still use fast-render.**
+**We've made some [protection](https://groups.google.com/d/msg/meteor-talk/LTO2n5D1bxY/J5EnVpJo0rAJ) to this issue; so you can still use Fast Render.**
 
 If you host your app under `*.meteor.com` etc. but use a separate domain, then your app will not be vulnerable in this way.
 
