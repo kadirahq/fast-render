@@ -187,9 +187,11 @@ Fast Render detects CORS headers with conflicting routes and turns off fast rend
 
 It's okay to add CORS headers to custom server side routes, but if they conflict with the client side routes (which are handled by Fast Render), then there will be a security issue. It would allow malicious XHR requests from other domains to access loggedIn user's subscription data.
 
-#### Shared Domains
+#### Cookie Tossing
 
-If your app is available under a shared domain like `*.meteor.com` or `*.herokuapp.com`, then you are exposed to a serious [security issue](https://groups.google.com/forum/#!topic/meteor-talk/Zhy1c6MdOH8). In these situations, don't use Fast Render.
+If your app is available under a shared domain like `*.meteor.com` or `*.herokuapp.com`, there is a potential [security issue](https://groups.google.com/forum/#!topic/meteor-talk/Zhy1c6MdOH8). 
+
+**We've made some [protection](https://groups.google.com/d/msg/meteor-talk/LTO2n5D1bxY/J5EnVpJo0rAJ) to this issue; so you can still use fast-render.**
 
 If you host your app under `*.meteor.com` etc. but use a separate domain, then your app will not be vulnerable in this way.
 
