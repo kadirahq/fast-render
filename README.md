@@ -287,7 +287,7 @@ Now, you've to set `fastRender:true` option in the route level and there is no `
 Fast Render 1.x comes with a lot of additional APIs. Now [these](#using-fast-renders-route-apis) are the only API's comes with Fast Render.
 
 * FastRender.route(<route-def>, <callback>)
-* FastRender.onAllRouters(<callback>)
+* FastRender.onAllRoutes(<callback>)
 
 #### Debugger
 
