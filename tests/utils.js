@@ -7,6 +7,13 @@ Tinytest.add('Utils - encode decode', function(test) {
   test.equal(decoded.date.getTime(), data.date.getTime());
 });
 
+Tinytest.add('Utils - encode decode special chars', function(test) {
+  var data = {special: "#://"};
+  var str = EncodeEJSON(data);
+
+  test.isFalse(/#/.test(str));
+});
+
 Tinytest.add('AddedToChanged - new fields', function(test) {
   var localCopy = {aa: 10};
   var added = {fields: {aa: 20, bb: 20}, msg: 'added'};
