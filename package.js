@@ -32,8 +32,8 @@ Package.onTest(function(api) {
   ], 'client');
 
   api.addFiles([
-    'tests/server/fast_render.js',
     'tests/server/context.js',
+    'tests/server/integration.js'
   ], 'server');
 });
 
