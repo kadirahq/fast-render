@@ -5,13 +5,14 @@
 Fast Render can improve the initial load time of your app, giving you 2-10 times faster initial page loads. It provides the same effect as Server Side Rendering (SSR), but still sends data over the wire to avoid breaking one of Meteor’s core principles.
 
 **Table of Contents**
-  
+
   - [Demo](#demo)
   - [Usage](#usage)
   - [How Fast Render Works](#how-fast-render-works)
   - [Using Fast Render With Iron Router](#using-fast-render-with-iron-router)
   - [Using Fast Render's route APIs](#using-fast-renders-route-apis)
   - [Security](#security)
+  - [Known Issues](#known-issues)
   - [Debugging](#debugging)
   - [Fast Render 2.x vs 1.x](#fast-render-2x-vs-1x)
 
@@ -50,7 +51,7 @@ Then add the `fastRender: true` option to your route:
 this.route('leaderboard', {
   path: '/leaderboard/:date?',
   waitOn: function(){
-    return Meteor.subscribe('leaderboard'); 
+    return Meteor.subscribe('leaderboard');
   },
   fastRender: true
 });
@@ -84,7 +85,7 @@ The next step is to specify which routes you'd like to apply Fast Render to. Tha
 this.route('leaderboard', {
   path: '/leaderboard/:date?',
   waitOn: function(){
-    return Meteor.subscribe('leaderboard'); 
+    return Meteor.subscribe('leaderboard');
   },
   fastRender: true
 });
@@ -149,7 +150,7 @@ FastRender.route('/leaderboard/:date', function(params) {
 
 #### FastRender.onAllRoutes(callback)
 
-This is very similar to `FastRender.route`, but lets you register a callback which will run on all routes. 
+This is very similar to `FastRender.route`, but lets you register a callback which will run on all routes.
 
 Use it like this:
 
@@ -176,7 +177,7 @@ So if you are doing some DB write operations or saving something to the filesyst
 It is wise to avoid side effects from following places:
 
 * publications
-* fastRender routes 
+* fastRender routes
 * IronRouter waitOn and subscriptions methods
 
 #### CORS Headers
@@ -189,11 +190,21 @@ It's okay to add CORS headers to custom server side routes, but if they conflict
 
 #### Cookie Tossing
 
-If your app is available under a shared domain like `*.meteor.com` or `*.herokuapp.com`, there is a potential [security issue](https://groups.google.com/forum/#!topic/meteor-talk/Zhy1c6MdOH8). 
+If your app is available under a shared domain like `*.meteor.com` or `*.herokuapp.com`, there is a potential [security issue](https://groups.google.com/forum/#!topic/meteor-talk/Zhy1c6MdOH8).
 
 **We've made some [protection](https://groups.google.com/d/msg/meteor-talk/LTO2n5D1bxY/J5EnVpJo0rAJ) to this issue; so you can still use Fast Render.**
 
 If you host your app under `*.meteor.com` etc. but use a separate domain, then your app will not be vulnerable in this way.
+
+## Known Issues
+
+### Client Error: "Server sent add for existing id"
+
+If you are getting this issue, it seems like you are doing a database write operation inside a `Template.rendered` (Template.yourTemplate.rendered).
+
+To get around with this issue, rather than invoking a DB operation with MiniMongo, try to invoke a method call.
+
+Related Issue & Discussion: <https://github.com/meteorhacks/fast-render/issues/80>
 
 ## Debugging
 
@@ -261,7 +272,7 @@ FastRender.debugger.enableFR()
 
 #### Logs
 
-Fast Render has robust logging. 
+Fast Render has robust logging.
 
 You can turn it on using `FastRender.debugger.showLogs()`.
 
