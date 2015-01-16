@@ -21,6 +21,7 @@ Package.onUse(function(api) {
 Package.onTest(function(api) {
   configure(api);
   api.use('tinytest', ['client', 'server']);
+  api.use('http', 'server');
 
   api.addFiles([
     'tests/utils.js'
@@ -32,8 +33,8 @@ Package.onTest(function(api) {
   ], 'client');
 
   api.addFiles([
-    'tests/server/fast_render.js',
     'tests/server/context.js',
+    'tests/server/integration.js'
   ], 'server');
 });
 
@@ -41,6 +42,7 @@ function configure (api) {
   api.versionsFrom('METEOR@0.9.3');
   api.use('iron:router@0.9.0 || 1.0.0', ['client', 'server'], {weak: true});
   api.use('chuangbo:cookie@1.1.0', 'client');
+  api.use('meteorhacks:picker@1.0.1', 'server');
 
   api.use(['minimongo', 'livedata', 'ejson', 'underscore', 'webapp', 'routepolicy', 'accounts-base'], ['server']);
   api.use(['minimongo', 'underscore', 'deps', 'ejson', 'accounts-base'], ['client']);
@@ -54,8 +56,9 @@ function configure (api) {
   ], ['client', 'server']);
 
   api.addFiles([
+    'lib/server/namespace.js',
     'lib/server/utils.js',
-    'lib/server/fast_render.js',
+    'lib/server/routes.js',
     'lib/server/publish_context.js',
     'lib/server/context.js',
     'lib/server/inject.js',
