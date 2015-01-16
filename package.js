@@ -21,6 +21,7 @@ Package.onUse(function(api) {
 Package.onTest(function(api) {
   configure(api);
   api.use('tinytest', ['client', 'server']);
+  api.use('http', 'server');
 
   api.addFiles([
     'tests/utils.js'
