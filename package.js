@@ -40,6 +40,7 @@ Package.onTest(function(api) {
 
 function configure (api) {
   api.versionsFrom('METEOR@0.9.3');
+  api.use('meteorhacks:inject-data@1.2.1', ['client', 'server']);
   api.use('iron:router@0.9.0 || 1.0.0', ['client', 'server'], {weak: true});
   api.use('chuangbo:cookie@1.1.0', 'client');
   api.use('meteorhacks:picker@1.0.1', 'server');
@@ -47,9 +48,6 @@ function configure (api) {
   api.use(['minimongo', 'livedata', 'ejson', 'underscore', 'webapp', 'routepolicy', 'accounts-base'], ['server']);
   api.use(['minimongo', 'underscore', 'deps', 'ejson', 'accounts-base'], ['client']);
 
-  api.addFiles([
-    'lib/server/inject_data.html',
-  ], 'server', {isAsset: true});
 
   api.addFiles([
     'lib/utils.js'
@@ -61,7 +59,6 @@ function configure (api) {
     'lib/server/routes.js',
     'lib/server/publish_context.js',
     'lib/server/context.js',
-    'lib/server/inject.js',
     'lib/server/iron_router_support.js',
   ], 'server');
 
@@ -69,8 +66,8 @@ function configure (api) {
     'lib/client/fast_render.js',
     'lib/client/debugger.js',
     'lib/client/ddp_update.js',
-    'lib/client/data_handler.js',
-    'lib/client/auth.js'
+    'lib/client/auth.js',
+    'lib/client/boot.js'
   ], 'client');
 
 }

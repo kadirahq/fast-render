@@ -7,7 +7,7 @@ Tinytest.add('FastRender - init - coll data ', function(test) {
 
   var payload = {
     subscriptions: {posts: true},
-    data: {
+    collectionData: {
       posts: [[
         {_id: "one", name: "arunoda"},
         {_id: "two", name: "meteorhacks"},
@@ -23,11 +23,11 @@ Tinytest.add('FastRender - init - coll data ', function(test) {
   WithNewInjectDdpMessage(function(conn, ddpMessage) {
     newMessages.push(ddpMessage);
   }, function() {
-    payload = EncodeEJSON(payload);
+
     FastRender.init(payload);
 
     test.equal(newMessages, expectedMessages);
-    test.equal(FastRender.subscriptions, payload.subscriptions);
+    test.equal(FastRender._subscriptions, payload.subscriptions);
   });
 });
 
@@ -35,7 +35,7 @@ Tinytest.addAsync('FastRender - init - ObjectId support', function(test, done) {
   var id = new LocalCollection._ObjectID();
   var payload = {
     subscriptions: {posts: true},
-    data: {
+    collectionData: {
       posts: [[
         {_id: id, name: "arunoda"},
       ]]
@@ -46,7 +46,7 @@ Tinytest.addAsync('FastRender - init - ObjectId support', function(test, done) {
     test.equal(ddpMessage.id, id._str);
     done();
   }, function() {
-    payload = EncodeEJSON(payload);
+
     FastRender.init(payload);
   });
 });
@@ -55,25 +55,24 @@ Tinytest.add('FastRender - init - merge docs', function(test) {
   var collName = Random.id();
   var payload = {
     subscriptions: {posts: true},
-    data: {
+    collectionData: {
 
     }
   };
 
-  payload.data[collName] = [
+  payload.collectionData[collName] = [
     [{_id: "one", name: "arunoda", age: 20}],
     [{_id: "one", name: "arunoda", age: 30, city: "colombo"}],
     [{_id: "one", plan: "pro"}]
   ];
-  
-  payload = EncodeEJSON(payload);
+
   FastRender.init(payload);
 
   var coll = new Mongo.Collection(collName);
   test.equal(coll.findOne('one'), {
     _id: "one",
-    name: "arunoda", 
-    age: 30, 
+    name: "arunoda",
+    age: 30,
     city: "colombo",
     plan: "pro"
   });
@@ -83,23 +82,22 @@ Tinytest.add('FastRender - init - merge docs deep', function(test) {
   var collName = Random.id();
   var payload = {
     subscriptions: {posts: true},
-    data: {
+    collectionData: {
 
     }
   };
 
-  payload.data[collName] = [
+  payload.collectionData[collName] = [
     [{_id: "one", name: "arunoda", profile: {name: "arunoda"}}],
     [{_id: "one", name: "arunoda", profile: {email: "arunoda@arunoda.com"}}],
   ];
-  
-  payload = EncodeEJSON(payload);
+
   FastRender.init(payload);
 
   var coll = new Mongo.Collection(collName);
   test.equal(coll.findOne('one'), {
     _id: "one",
-    name: "arunoda", 
+    name: "arunoda",
     profile: {
       name: "arunoda",
       email: "arunoda@arunoda.com"
@@ -112,17 +110,16 @@ Tinytest.add('FastRender - init - ejon data', function(test) {
   var collName = Random.id();
   var payload = {
     subscriptions: {posts: true},
-    data: {
+    collectionData: {
 
     }
   };
 
   var date = new Date('2014-10-20');
-  payload.data[collName] = [
+  payload.collectionData[collName] = [
     [{_id: "one", name: "arunoda", date: date}],
   ];
-  
-  payload = EncodeEJSON(payload);
+
   FastRender.init(payload);
 
   var coll = new Mongo.Collection(collName);

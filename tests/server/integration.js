@@ -17,7 +17,7 @@ Tinytest.add('integration - with a simple route', function(test) {
 
   var data = getFRData(path);
   test.isTrue(data.subscriptions[pubName]);
-  test.equal(data.data[collName][0][0], obj);
+  test.equal(data.collectionData[collName][0][0], obj);
 });
 
 Tinytest.add('integration - onAllRoutes', function(test) {
@@ -43,7 +43,7 @@ Tinytest.add('integration - onAllRoutes', function(test) {
 
   var data = getFRData(path);
   test.isTrue(data.subscriptions[pubName]);
-  test.equal(data.data[collName][0][0], obj);
+  test.equal(data.collectionData[collName][0][0], obj);
   cursorHandler.stop();
 });
 
@@ -76,8 +76,8 @@ Tinytest.add('integration - onAllRoutes + route ', function(test) {
 
   var data = getFRData(path);
   test.isTrue(data.subscriptions[pubName]);
-  test.equal(data.data[collName][0][0], obj1);
-  test.equal(data.data[collName][1][0], obj2);
+  test.equal(data.collectionData[collName][0][0], obj1);
+  test.equal(data.collectionData[collName][1][0], obj2);
   cursorHandler.stop();
 });
 
@@ -99,7 +99,7 @@ Tinytest.add('integration - null publications', function(test) {
   });
 
   var data = getFRData(path);
-  test.equal(data.data[collName][0][0], obj);
+  test.equal(data.collectionData[collName][0][0], obj);
   cursorHandler.stop();
 });
 
@@ -123,7 +123,7 @@ Tinytest.add('integration - send data via this.* apis', function(test) {
 
   var data = getFRData(path);
   test.isTrue(data.subscriptions[pubName]);
-  test.equal(data.data[collName][0][0], obj);
+  test.equal(data.collectionData[collName][0][0], obj);
 });
 
 Tinytest.add('integration - send data via this.* apis, but delayed', function(test) {
@@ -146,7 +146,7 @@ Tinytest.add('integration - send data via this.* apis, but delayed', function(te
 
   var data = getFRData(path);
   test.isFalse(data.subscriptions[pubName]);
-  test.equal(data.data, {});
+  test.equal(data.collectionData, {});
 });
 
 Tinytest.add('integration - error inside a publication', function(test) {
@@ -167,7 +167,7 @@ Tinytest.add('integration - error inside a publication', function(test) {
   });
 
   var data = getFRData(path);
-  test.equal(data.data, {});
+  test.equal(data.collectionData, {});
 });
 
 Tinytest.add('integration - error inside a null publication', function(test) {
@@ -184,7 +184,7 @@ Tinytest.add('integration - error inside a null publication', function(test) {
   });
 
   var data = getFRData(path);
-  test.equal(data.data, {});
+  test.equal(data.collectionData, {});
 });
 
 var urlResolve = Npm.require('url').resolve;
@@ -192,8 +192,9 @@ function getFRData(path) {
   var url = urlResolve(process.env.ROOT_URL, path);
   var res = HTTP.get(url);
 
-  var encodedData = res.content.match(/render">(.*)<\/script/)[1];
-  return DecodeEJSON(encodedData);
+
+  var encodedData = res.content.match(/data">(.*)<\/script/)[1];
+  return InjectData._decode(encodedData)['fast-render-data'];
 }
 
 function createCursorHandler(callback) {
