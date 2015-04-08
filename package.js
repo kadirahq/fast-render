@@ -3,7 +3,7 @@ var path = Npm.require('path');
 
 Package.describe({
   "summary": "Render you app even before the DDP connection comes live. - magic?",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "git": "https://github.com/meteorhacks/fast-render",
   "name": "meteorhacks:fast-render"
 });
