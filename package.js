@@ -3,7 +3,7 @@ var path = Npm.require('path');
 
 Package.describe({
   "summary": "Render your app before the DDP connection even comes alive - magic?",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "git": "https://github.com/meteorhacks/fast-render",
   "name": "meteorhacks:fast-render"
 });
@@ -40,7 +40,7 @@ Package.onTest(function(api) {
 
 function configure (api) {
   api.versionsFrom('METEOR@0.9.3');
-  api.use('meteorhacks:inject-data@1.2.3', ['client', 'server']);
+  api.use('meteorhacks:inject-data@1.3.0', ['client', 'server']);
   api.use('iron:router@0.9.0 || 1.0.0', ['client', 'server'], {weak: true});
   api.use('chuangbo:cookie@1.1.0', 'client');
   api.use('meteorhacks:picker@1.0.1', 'server');
