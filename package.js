@@ -43,7 +43,7 @@ function configure (api) {
   api.use('meteorhacks:inject-data@1.3.0', ['client', 'server']);
   api.use('iron:router@0.9.0 || 1.0.0', ['client', 'server'], {weak: true});
   api.use('chuangbo:cookie@1.1.0', 'client');
-  api.use('meteorhacks:picker@1.0.1', 'server');
+  api.use('meteorhacks:picker@1.0.3', 'server');
 
   api.use(['minimongo', 'livedata', 'ejson', 'underscore', 'webapp', 'routepolicy', 'accounts-base'], ['server']);
   api.use(['minimongo', 'underscore', 'deps', 'ejson', 'accounts-base'], ['client']);
