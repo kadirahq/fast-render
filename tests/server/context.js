@@ -17,7 +17,7 @@ Tinytest.add('Context - subscribe', function(test) {
     collectionData: {},
     loginToken: undefined
   };
-  expectedData.subscriptions[pubName] = true;
+  expectedData.subscriptions[pubName] = {"[]": true};
   expectedData.collectionData[collName] = [
     coll.find().fetch()
   ];
@@ -47,7 +47,7 @@ Tinytest.add('Context - subscribe with this.x apis', function(test) {
     collectionData: {},
     loginToken: undefined
   };
-  expectedData.subscriptions[pubName] = true;
+  expectedData.subscriptions[pubName] = {"[]": true};
   expectedData.collectionData[collName] = [
     coll.find().fetch()
   ];
