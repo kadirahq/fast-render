@@ -1,5 +1,8 @@
 # Change Log
 
+### v2.8.1
+* Fix some integration tests
+
 ### v2.8.0
 * Add more internal APIs to support SSR
 
