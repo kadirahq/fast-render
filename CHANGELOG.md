@@ -1,5 +1,8 @@
 # Change Log
 
+### v2.9.0
+* Add support for Meteor 1.2
+
 ### v2.8.1
 * Fix some integration tests
 
