@@ -32,7 +32,7 @@ Tinytest.add('FastRender - init - coll data ', function(test) {
 });
 
 Tinytest.addAsync('FastRender - init - ObjectId support', function(test, done) {
-  var id = new LocalCollection._ObjectID();
+  var id = new IDTools.ObjectID();
   var payload = {
     subscriptions: {posts: true},
     collectionData: {

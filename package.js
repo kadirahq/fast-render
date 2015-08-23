@@ -22,6 +22,8 @@ Package.onTest(function(api) {
   configure(api);
   api.use('tinytest', ['client', 'server']);
   api.use('http', 'server');
+  api.use('random', ['server', 'client']);
+  api.use('mongo', ['server', 'client']);
 
   api.addFiles([
     'tests/utils.js'
@@ -63,6 +65,7 @@ function configure (api) {
   ], 'server');
 
   api.addFiles([
+    'lib/client/id_tools.js',
     'lib/client/fast_render.js',
     'lib/client/debugger.js',
     'lib/client/ddp_update.js',
