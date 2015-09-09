@@ -1,5 +1,9 @@
 # Change Log
 
+### v2.10.0
+
+* Throw an exception, when a route start without "/". See: [#135](https://github.com/meteorhacks/fast-render/pull/135)
+
 ### v2.9.0
 * Add support for Meteor 1.2
 
