@@ -204,6 +204,10 @@ To get around with this issue, rather than invoking a DB operation with MiniMong
 
 Related Issue & Discussion: <https://github.com/meteorhacks/fast-render/issues/80>
 
+### No data is injected when using "AppCache" package
+
+Currently FastRender does not support simultaneous usage with [appcache package](https://atmospherejs.com/meteor/appcache)
+
 ## Debugging
 
 Sometimes, you need to test whether Fast Render is working or not. You can do this using the built-in debugger. The debugger works on the client and is safe to run it on a deployed app. It has a few useful features:
