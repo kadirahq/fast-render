@@ -187,6 +187,15 @@ Tinytest.add('integration - error inside a null publication', function(test) {
   test.equal(data.collectionData, {});
 });
 
+Tinytest.add('integration - when path has no leading slash', function(test) {
+  var path = Random.id();
+
+  test.throws(function(){
+    FastRender.route(path, function() {
+    });
+  }, 'Error: path (' + path + ') must begin with a leading slash "/"');
+});
+
 var urlResolve = Npm.require('url').resolve;
 function getFRData(path) {
   var url = urlResolve(process.env.ROOT_URL, path);
