@@ -43,7 +43,7 @@ meteor add meteorhacks:fast-render
 
 After that, make sure you've moved your route related code (`router.js` file or relavant files) to a place which can be access by both server and client. (i.e. the `lib` folder).
 
-To add Fast Render support to FlowRouter, visit [here](https://github.com/kadirahq/flow-router#fast-render).
+**To add Fast Render support to FlowRouter, visit [here](https://github.com/kadirahq/flow-router#fast-render).**
 
 Rest of the documentation is for apps utilizing Iron Router.
 
