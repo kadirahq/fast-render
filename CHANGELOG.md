@@ -1,5 +1,8 @@
 # Change Log
 
+### v2.11.0
+* Refactor the way how context process data. With this, we can fix [this](https://github.com/kadirahq/flow-router/issues/431) FlowRouter SSR issue.
+
 ### v2.10.0
 
 * Throw an exception, when a route start without "/". See: [#135](https://github.com/meteorhacks/fast-render/pull/135)
