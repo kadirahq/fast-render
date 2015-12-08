@@ -103,6 +103,97 @@ Tinytest.add('integration - null publications', function(test) {
   cursorHandler.stop();
 });
 
+Tinytest.add('integration - collection shared by pubs', function(test) {
+  var collName = Random.id();
+  var pubName1 = Random.id();
+  var pubName2 = Random.id();
+  var path = "/" + Random.id();
+
+  // Publish the collection with just one object
+  Meteor.publish(pubName1, function() {
+    var self = this;
+    self.added(collName, 'docToNotChange', {
+      prop: 'value',
+    });
+    self.added(collName, 'docToChange', {
+      propToNotChange: 'value',
+      propToChange: 'origValue' 
+    });
+    self.added(collName, 'docToRemove', {
+      prop: 'value',
+    });
+    self.ready();
+  });
+
+  Meteor.publish(pubName2, function() {
+    var self = this;
+    
+    // Removing an object not in the collection should cause an error
+    test.throws(function() {
+      self.removed(collName, "missingDoc");            
+    }, 'Removed nonexistent document');
+
+    // Changing an object not in the collection should cause an error
+    test.throws(function() {
+      self.changed(collName, "missingDoc", { propAdded: 'addedValue' });            
+    }, 'Could not find element');
+
+    self.added(collName, "docAdded", {
+      prop: 'value'
+    });
+    self.added(collName, "docAddedAndRemoved", {
+      prop: 'value'
+    });    
+    self.removed(collName, "docAddedAndRemoved");
+
+    // Changing an object in the collection should work
+    self.changed(collName, "docToChange", { 
+      propToChange: 'changedValue',
+      propAdded: 'addedValue'
+    });
+    
+    // Removing an object in the collection should not fail (though the object
+    // won't be removed because we didn't publish it)
+    self.removed(collName, "docToRemove");
+    self.ready();
+  });
+
+  FastRender.route(path, function() {
+    this.subscribe(pubName1);
+    this.subscribe(pubName2);
+  });
+
+  var data = getFRData(path);
+  test.equal(data.collectionData[collName], [
+    [
+      {
+        _id: 'docToNotChange',
+        prop: 'value',
+      },
+      {
+        _id: 'docToChange',
+        propToNotChange: 'value',
+        propToChange: 'origValue' 
+      },
+      {
+        _id: 'docToRemove',
+        prop: 'value',
+      },
+    ],
+    [
+      {
+        _id: 'docAdded',
+        prop: 'value'
+      },
+      {
+        _id: 'docToChange',
+        propToChange: 'changedValue',
+        propAdded: 'addedValue'        
+      },
+    ],    
+  ]);
+});
+
 Tinytest.add('integration - send data via this.* apis', function(test) {
   var collName = Random.id();
   var pubName = Random.id();
