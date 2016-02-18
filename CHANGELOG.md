@@ -1,5 +1,8 @@
 # Change Log
 
+### v2.12.0
+* Use inject-data's 2.0 API.
+
 ### v2.11.0
 * Refactor the way how context process data. With this, we can fix [this](https://github.com/kadirahq/flow-router/issues/431) FlowRouter SSR issue.
 
@@ -22,4 +25,3 @@
 ### v2.5.0
 
 * Add IE8 Support
-
