@@ -42,7 +42,7 @@ Package.onTest(function(api) {
 
 function configure (api) {
   api.versionsFrom('METEOR@0.9.3');
-  api.use('meteorhacks:inject-data@1.4.0', ['client', 'server']);
+  api.use('meteorhacks:inject-data@2.0.0', ['client', 'server']);
   api.use('iron:router@0.9.0 || 1.0.0', ['client', 'server'], {weak: true});
   api.use('chuangbo:cookie@1.1.0', 'client');
   api.use('meteorhacks:picker@1.0.3', 'server');
