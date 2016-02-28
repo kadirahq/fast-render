@@ -46,8 +46,9 @@ function configure (api) {
   api.use('iron:router@0.9.0 || 1.0.0', ['client', 'server'], {weak: true});
   api.use('chuangbo:cookie@1.1.0', 'client');
   api.use('meteorhacks:picker@1.0.3', 'server');
+  api.use('meteorhacks:meteorx@1.4.1', 'server');
 
-  api.use(['minimongo', 'livedata', 'ejson', 'underscore', 'webapp', 'routepolicy', 'accounts-base'], ['server']);
+  api.use(['minimongo', 'livedata', 'ejson', 'underscore', 'webapp', 'routepolicy', 'accounts-base', 'random'], ['server']);
   api.use(['minimongo', 'underscore', 'deps', 'ejson', 'accounts-base'], ['client']);
 
 
