@@ -1,5 +1,9 @@
 # Change Log
 
+### v2.13.0
+
+* Use a real subscription as the Publication context. See [PR160](https://github.com/kadirahq/fast-render/pull/160).
+
 ### v2.12.0
 * Use inject-data's 2.0 API.
 
