@@ -1,3 +1,5 @@
+bufferedWritesInterval = 5;
+
 Tinytest.add('AddedToChanged - new fields', function(test) {
   var localCopy = {aa: 10};
   var added = {fields: {aa: 20, bb: 20}, msg: 'added'};

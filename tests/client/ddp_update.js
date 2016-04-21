@@ -1,4 +1,4 @@
-Tinytest.add('DDPUpdate - convert added to changed', function(test) {
+Tinytest.addAsync('DDPUpdate - convert added to changed', function(test, done) {
   var collName = Random.id();
   var coll = new Mongo.Collection(collName);
 
@@ -9,19 +9,25 @@ Tinytest.add('DDPUpdate - convert added to changed', function(test) {
     fields: {name: "arunoda"}
   });
 
-  test.equal(coll.findOne('one'), {_id: 'one', name: 'arunoda'});
+  Meteor.setTimeout(function () {
+    test.equal(coll.findOne('one'), {_id: 'one', name: 'arunoda'});
 
-  Meteor.connection._livedata_data({
-    msg: 'added',
-    collection: collName,
-    id: 'one',
-    fields: {name: "kuma", age: 20}
-  });
+    Meteor.connection._livedata_data({
+      msg: 'added',
+      collection: collName,
+      id: 'one',
+      fields: {name: "kuma", age: 20}
+    });
 
-  test.equal(coll.findOne('one'), {_id: 'one', name: 'kuma', age: 20});
+    Meteor.setTimeout(function () {
+      test.equal(coll.findOne('one'), {_id: 'one', name: 'kuma', age: 20});
+      done();
+    }, bufferedWritesInterval);
+
+  }, bufferedWritesInterval);
 });
 
-Tinytest.add('DDPUpdate - create collection later on', function(test) {
+Tinytest.addAsync('DDPUpdate - create collection later on', function(test, done) {
   var collName = Random.id();
 
   Meteor.connection._livedata_data({
@@ -39,7 +45,10 @@ Tinytest.add('DDPUpdate - create collection later on', function(test) {
   });
 
   var coll = new Mongo.Collection(collName);
-  test.equal(coll.find().fetch().length, 2);
+  Meteor.setTimeout(function () {
+    test.equal(coll.find().fetch().length, 2);
+    done();
+  }, bufferedWritesInterval);
 });
 
 Tinytest.add('DDPUpdate - delete subscriptions', function(test) {
