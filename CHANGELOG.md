@@ -1,5 +1,9 @@
 # Change Log
 
+### v2.14.0
+
+* Add support for Meteor 1.3.2 with buffered DDP. See [PR167](https://github.com/kadirahq/fast-render/pull/167)
+
 ### v2.13.0
 
 * Use a real subscription as the Publication context. See [PR160](https://github.com/kadirahq/fast-render/pull/160).
