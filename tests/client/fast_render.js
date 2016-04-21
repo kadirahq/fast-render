@@ -51,7 +51,7 @@ Tinytest.addAsync('FastRender - init - ObjectId support', function(test, done) {
   });
 });
 
-Tinytest.add('FastRender - init - merge docs', function(test) {
+Tinytest.addAsync('FastRender - init - merge docs', function(test, done) {
   var collName = Random.id();
   var payload = {
     subscriptions: {posts: true},
@@ -69,16 +69,19 @@ Tinytest.add('FastRender - init - merge docs', function(test) {
   FastRender.init(payload);
 
   var coll = new Mongo.Collection(collName);
-  test.equal(coll.findOne('one'), {
-    _id: "one",
-    name: "arunoda",
-    age: 30,
-    city: "colombo",
-    plan: "pro"
-  });
+  Meteor.setTimeout(function () {
+    test.equal(coll.findOne('one'), {
+      _id: "one",
+      name: "arunoda",
+      age: 30,
+      city: "colombo",
+      plan: "pro"
+    });
+    done();
+  }, bufferedWritesInterval);
 });
 
-Tinytest.add('FastRender - init - merge docs deep', function(test) {
+Tinytest.addAsync('FastRender - init - merge docs deep', function(test, done) {
   var collName = Random.id();
   var payload = {
     subscriptions: {posts: true},
@@ -95,18 +98,21 @@ Tinytest.add('FastRender - init - merge docs deep', function(test) {
   FastRender.init(payload);
 
   var coll = new Mongo.Collection(collName);
-  test.equal(coll.findOne('one'), {
-    _id: "one",
-    name: "arunoda",
-    profile: {
+  Meteor.setTimeout(function () {
+    test.equal(coll.findOne('one'), {
+      _id: "one",
       name: "arunoda",
-      email: "arunoda@arunoda.com"
-    }
-  });
+      profile: {
+        name: "arunoda",
+        email: "arunoda@arunoda.com"
+      }
+    });
+    done();
+  }, bufferedWritesInterval);
 });
 
 
-Tinytest.add('FastRender - init - ejon data', function(test) {
+Tinytest.addAsync('FastRender - init - ejon data', function(test, done) {
   var collName = Random.id();
   var payload = {
     subscriptions: {posts: true},
@@ -123,8 +129,11 @@ Tinytest.add('FastRender - init - ejon data', function(test) {
   FastRender.init(payload);
 
   var coll = new Mongo.Collection(collName);
-  var doc = coll.findOne("one");
-  test.equal(doc.date.getTime(), date.getTime());
+  Meteor.setTimeout(function () {
+    var doc = coll.findOne("one");
+    test.equal(doc.date.getTime(), date.getTime());
+    done();
+  }, bufferedWritesInterval);
 });
 
 WithNewInjectDdpMessage = function(newCallback, runCode) {
