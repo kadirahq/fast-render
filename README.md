@@ -20,11 +20,11 @@ Let's look at a demo. Here is the leaderboard example from [BulletProof Meteor](
 
 ![a Meteor app Without Fast Render](https://cldup.com/v4PmJqPtlY.png)
 
-Here you see the loading screen while we wait on data to render the acutual leaderboard.
+Here you see the loading screen while we wait on data to render the actual leaderboard.
 
 ---
 
-Now let's see how the leaderboard loads when using use Fast Render: [click here](https://bulletproofmeteor.com/leaderboard).
+Now let's see how the leaderboard loads when using Fast Render: [click here](https://bulletproofmeteor.com/leaderboard).
 
 You never see the loading screen becuase we don't have to wait on data. Right after the page is loaded, the leaderboard is there. To do this, all we've done is add Fast Render to the app and insert a single line of configuration.
 
