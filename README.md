@@ -208,6 +208,8 @@ Related Issue & Discussion: <https://github.com/meteorhacks/fast-render/issues/8
 
 Currently FastRender does not support simultaneous usage with [appcache package](https://atmospherejs.com/meteor/appcache)
 
+Related Issue & Discussion: <https://github.com/kadirahq/fast-render/issues/136>
+
 ## Debugging
 
 Sometimes, you need to test whether Fast Render is working or not. You can do this using the built-in debugger. The debugger works on the client and is safe to run it on a deployed app. It has a few useful features:
