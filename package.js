@@ -3,8 +3,8 @@ var path = Npm.require('path');
 
 Package.describe({
   "summary": "Render your app before the DDP connection even comes alive - magic?",
-  "version": "2.16.1",
-  "git": "https://github.com/abecks/fast-render",
+  "version": "2.16.2",
+  "git": "https://github.com/abecks/meteor-fast-render",
   "name": "staringatlights:fast-render"
 });
 
