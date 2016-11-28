@@ -1,6 +1,8 @@
-# Fast Render [![Build Status](https://travis-ci.org/kadirahq/fast-render.svg?branch=master)](https://travis-ci.org/meteorhacks/fast-render)
+# Fast Render
 
 Fast Render can improve the initial load time of your app, giving you 2-10 times faster initial page loads. It provides the same effect as Server Side Rendering (SSR), but still sends data over the wire to avoid breaking one of Meteor’s core principles.
+
+#### This is a continuation of `meteorhacks:fast-render` by @arunoda
 
 **Table of Contents**
 
@@ -38,7 +40,7 @@ Check this demo [video](https://www.youtube.com/watch?v=mGcE6UVOqPk) if you need
 Add Fast Render to your Meteor app:
 
 ~~~shell
-meteor add meteorhacks:fast-render
+meteor add staringatlights:fast-render
 ~~~
 
 After that, make sure you've moved your route related code (`router.js` file or relavant files) to a place which can be access by both server and client. (i.e. the `lib` folder).
