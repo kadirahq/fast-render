@@ -1,5 +1,11 @@
 # Change Log
 
+### v2.16.3
+- Updating `staringatlights:inject-data` dependency
+
+### v2.16
+- Releasing as `staringatlights:fast-render`
+
 ### v2.14.0
 
 * Add support for Meteor 1.3.2 with buffered DDP. See [PR167](https://github.com/kadirahq/fast-render/pull/167)
