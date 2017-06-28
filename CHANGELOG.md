@@ -1,5 +1,16 @@
 # Change Log
 
+### v2.16.1
+
+* Fix a regression in Meteor v1.5 causing fast-render to break Meteor accounts
+  login/logout functionality
+* Skip fast-render payload loading, if subscriptions already ready - Fixes #12
+  ("Expected not to find a document already present for an add" error)
+
+### v2.15.0 - v2.16.0
+
+LOG MISSING
+
 ### v2.14.0
 
 * Add support for Meteor 1.3.2 with buffered DDP. See [PR167](https://github.com/kadirahq/fast-render/pull/167)
